@@ -1,0 +1,134 @@
+.gdg-logo-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Compact static logo (e.g. admin login card) */
+.gdg-logo-wrapper--static {
+  max-width: 280px;
+  height: 200px;
+}
+
+.ambient-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(66, 133, 244, 0.3), rgba(234, 67, 53, 0.2), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(20px);
+}
+
+.gdg-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.bracket {
+  width: 100px;
+  height: 160px;
+  flex-shrink: 0;
+}
+
+.bracket path,
+.bracket ellipse,
+.bracket rect {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+}
+
+.gdg-text-container {
+  position: absolute;
+  text-align: center;
+  z-index: 1;
+}
+
+.gdg-logo-wrapper--static .gdg-text-main {
+  color: #1e293b;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.gdg-logo-wrapper--static .gdg-text-sub .red,
+.gdg-logo-wrapper--static .gdg-text-sub .blue,
+.gdg-logo-wrapper--static .gdg-text-sub .green,
+.gdg-logo-wrapper--static .gdg-text-sub .yellow {
+  text-shadow: none;
+}
+
+.gdg-text-main {
+  font-size: 64px;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 30px rgba(66, 133, 244, 0.4);
+}
+
+.gdg-text-sub {
+  font-size: 20px;
+  letter-spacing: 6px;
+  line-height: 1;
+}
+
+.gdg-text-sub .red {
+  color: #EA4335;
+  text-shadow: 0 0 10px rgba(234, 67, 53, 0.8), 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.gdg-text-sub .blue {
+  color: #4285F4;
+  text-shadow: 0 0 10px rgba(66, 133, 244, 0.8), 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.gdg-text-sub .green {
+  color: #34A853;
+  text-shadow: 0 0 10px rgba(52, 168, 83, 0.8), 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.gdg-text-sub .yellow {
+  color: #FBBC05;
+  text-shadow: 0 0 10px rgba(251, 188, 5, 0.8), 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive adjustments for overlay panels */
+@media (max-width: 768px) {
+  .gdg-logo-wrapper--static {
+    max-width: 240px;
+    height: 160px;
+  }
+
+  .gdg-logo-wrapper {
+    max-width: 300px;
+    height: 240px;
+  }
+
+  .bracket {
+    width: 90px;
+    height: 120px;
+  }
+
+  .gdg-text-main {
+    font-size: 48px;
+  }
+
+  .gdg-logo-wrapper--static .gdg-text-main {
+    font-size: 40px;
+  }
+
+  .gdg-text-sub {
+    font-size: 16px;
+    letter-spacing: 4px;
+  }
+
+  .gdg-logo-wrapper--static .gdg-text-sub {
+    font-size: 14px;
+    letter-spacing: 4px;
+  }
+}

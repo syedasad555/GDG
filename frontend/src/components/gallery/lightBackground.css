@@ -1,0 +1,297 @@
+/* ================= LIGHT BACKGROUND CONTAINER ================= */
+.light-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ================= SPOTLIGHT BEAM ================= */
+.spotlight-beam {
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 150%;
+  pointer-events: none;
+  transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, opacity;
+}
+
+/* Position variants */
+.spotlight-beam.position-left {
+  left: 15%;
+}
+
+.spotlight-beam.position-center {
+  left: 50%;
+}
+
+.spotlight-beam.position-right {
+  left: 85%;
+}
+
+/* ================= SPOTLIGHT CORE (Main cone shape) ================= */
+.spotlight-core {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center top,
+    rgba(220, 220, 255, 0.7) 0%,
+    rgba(180, 180, 255, 0.5) 15%,
+    rgba(150, 150, 255, 0.35) 30%,
+    rgba(120, 120, 255, 0.25) 45%,
+    rgba(90, 90, 220, 0.15) 60%,
+    rgba(60, 60, 200, 0.08) 75%,
+    transparent 90%
+  );
+  clip-path: polygon(
+    48% 0%,
+    52% 0%,
+    85% 100%,
+    15% 100%
+  );
+  filter: blur(35px);
+  animation: 
+    spotlightPulse 4s ease-in-out infinite alternate,
+    spotlightBreathing 6s ease-in-out infinite;
+}
+
+/* ================= SPOTLIGHT GLOW (Outer glow layer) ================= */
+.spotlight-glow {
+  position: absolute;
+  top: -5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 110%;
+  background: radial-gradient(
+    ellipse at center top,
+    rgba(240, 240, 255, 0.3) 0%,
+    rgba(200, 200, 255, 0.2) 20%,
+    rgba(160, 160, 255, 0.12) 40%,
+    rgba(120, 120, 255, 0.06) 60%,
+    transparent 85%
+  );
+  clip-path: polygon(
+    45% 0%,
+    55% 0%,
+    90% 100%,
+    10% 100%
+  );
+  filter: blur(45px);
+  animation: 
+    glowPulse 5s ease-in-out infinite alternate,
+    glowBreathing 7s ease-in-out infinite;
+}
+
+/* ================= SPOTLIGHT SHIMMER (Subtle shimmer effect) ================= */
+.spotlight-shimmer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 20%,
+    rgba(200, 200, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0.05) 60%,
+    transparent 80%
+  );
+  clip-path: polygon(
+    49% 0%,
+    51% 0%,
+    82% 100%,
+    18% 100%
+  );
+  filter: blur(25px);
+  animation: shimmerMove 8s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+/* ================= ANIMATIONS ================= */
+
+/* Main spotlight pulsing (brightness + size) */
+@keyframes spotlightPulse {
+  0% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateX(-50%) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+/* Spotlight breathing animation */
+@keyframes spotlightBreathing {
+  0%, 100% {
+    filter: blur(35px) brightness(1);
+  }
+  50% {
+    filter: blur(38px) brightness(1.1);
+  }
+}
+
+/* Glow layer pulsing */
+@keyframes glowPulse {
+  0% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(1);
+  }
+  100% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
+/* Glow breathing animation */
+@keyframes glowBreathing {
+  0%, 100% {
+    filter: blur(45px) brightness(0.9);
+  }
+  50% {
+    filter: blur(48px) brightness(1.1);
+  }
+}
+
+/* Shimmer movement */
+@keyframes shimmerMove {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translateX(-50%) translateY(0);
+  }
+  25% {
+    opacity: 0.5;
+    transform: translateX(-50%) translateY(-2%);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateX(-50%) translateY(2%);
+  }
+  75% {
+    opacity: 0.4;
+    transform: translateX(-50%) translateY(-1%);
+  }
+}
+
+/* ================= GPU OPTIMIZATION ================= */
+.spotlight-beam,
+.spotlight-core,
+.spotlight-glow,
+.spotlight-shimmer {
+  transform: translateX(-50%) translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* ================= RESPONSIVE DESIGN ================= */
+@media (max-width: 1200px) {
+  .spotlight-beam {
+    width: 500px;
+  }
+  
+  .spotlight-beam.position-left {
+    left: 20%;
+  }
+  
+  .spotlight-beam.position-right {
+    left: 80%;
+  }
+}
+
+@media (max-width: 900px) {
+  .spotlight-beam {
+    width: 400px;
+    height: 120%;
+  }
+  
+  .spotlight-beam.position-left {
+    left: 25%;
+  }
+  
+  .spotlight-beam.position-right {
+    left: 75%;
+  }
+  
+  .spotlight-core {
+    filter: blur(28px);
+  }
+  
+  .spotlight-glow {
+    filter: blur(35px);
+  }
+  
+  .spotlight-shimmer {
+    filter: blur(20px);
+  }
+}
+
+@media (max-width: 600px) {
+  .spotlight-beam {
+    width: 300px;
+    height: 100%;
+  }
+  
+  .spotlight-beam.position-left {
+    left: 30%;
+  }
+  
+  .spotlight-beam.position-right {
+    left: 70%;
+  }
+  
+  .spotlight-core {
+    filter: blur(22px);
+    clip-path: polygon(
+      46% 0%,
+      54% 0%,
+      88% 100%,
+      12% 100%
+    );
+  }
+  
+  .spotlight-glow {
+    filter: blur(28px);
+    clip-path: polygon(
+      42% 0%,
+      58% 0%,
+      92% 100%,
+      8% 100%
+    );
+  }
+  
+  .spotlight-shimmer {
+    filter: blur(15px);
+    clip-path: polygon(
+      47% 0%,
+      53% 0%,
+      85% 100%,
+      15% 100%
+    );
+  }
+}
+
+/* ================= SMOOTH TRANSITIONS ================= */
+.spotlight-beam.position-left,
+.spotlight-beam.position-center,
+.spotlight-beam.position-right {
+  transition: left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Background Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .test-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            position: relative;
+        }
+
+        .left-panel {
+            width: 50%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .right-panel {
+            width: 50%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+
+        .control-btn.active {
+            background: rgba(120,120,255,0.3);
+            border-color: rgba(120,120,255,0.5);
+        }
+
+        /* Import the light background styles */
+        .light-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .spotlight-beam {
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 150%;
+            pointer-events: none;
+            transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
+        }
+
+        .spotlight-beam.position-left {
+            left: 15%;
+        }
+
+        .spotlight-beam.position-center {
+            left: 50%;
+        }
+
+        .spotlight-beam.position-right {
+            left: 85%;
+        }
+
+        .spotlight-core {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                ellipse at center top,
+                rgba(220, 220, 255, 0.7) 0%,
+                rgba(180, 180, 255, 0.5) 15%,
+                rgba(150, 150, 255, 0.35) 30%,
+                rgba(120, 120, 255, 0.25) 45%,
+                rgba(90, 90, 220, 0.15) 60%,
+                rgba(60, 60, 200, 0.08) 75%,
+                transparent 90%
+            );
+            clip-path: polygon(
+                48% 0%,
+                52% 0%,
+                85% 100%,
+                15% 100%
+            );
+            filter: blur(35px);
+            animation: 
+                spotlightPulse 4s ease-in-out infinite alternate,
+                spotlightBreathing 6s ease-in-out infinite;
+        }
+
+        .spotlight-glow {
+            position: absolute;
+            top: -5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: 110%;
+            background: radial-gradient(
+                ellipse at center top,
+                rgba(240, 240, 255, 0.3) 0%,
+                rgba(200, 200, 255, 0.2) 20%,
+                rgba(160, 160, 255, 0.12) 40%,
+                rgba(120, 120, 255, 0.06) 60%,
+                transparent 85%
+            );
+            clip-path: polygon(
+                45% 0%,
+                55% 0%,
+                90% 100%,
+                10% 100%
+            );
+            filter: blur(45px);
+            animation: 
+                glowPulse 5s ease-in-out infinite alternate,
+                glowBreathing 7s ease-in-out infinite;
+        }
+
+        .spotlight-shimmer {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                180deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.05) 20%,
+                rgba(200, 200, 255, 0.08) 40%,
+                rgba(255, 255, 255, 0.05) 60%,
+                transparent 80%
+            );
+            clip-path: polygon(
+                49% 0%,
+                51% 0%,
+                82% 100%,
+                18% 100%
+            );
+            filter: blur(25px);
+            animation: shimmerMove 8s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes spotlightPulse {
+            0% {
+                opacity: 0.8;
+                transform: translateX(-50%) scale(1);
+            }
+            50% {
+                opacity: 0.9;
+                transform: translateX(-50%) scale(1.02);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1.05);
+            }
+        }
+
+        @keyframes spotlightBreathing {
+            0%, 100% {
+                filter: blur(35px) brightness(1);
+            }
+            50% {
+                filter: blur(38px) brightness(1.1);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                opacity: 0.5;
+                transform: translateX(-50%) scale(1);
+            }
+            100% {
+                opacity: 0.8;
+                transform: translateX(-50%) scale(1.08);
+            }
+        }
+
+        @keyframes glowBreathing {
+            0%, 100% {
+                filter: blur(45px) brightness(0.9);
+            }
+            50% {
+                filter: blur(48px) brightness(1.1);
+            }
+        }
+
+        @keyframes shimmerMove {
+            0%, 100% {
+                opacity: 0.3;
+                transform: translateX(-50%) translateY(0);
+            }
+            25% {
+                opacity: 0.5;
+                transform: translateX(-50%) translateY(-2%);
+            }
+            50% {
+                opacity: 0.7;
+                transform: translateX(-50%) translateY(2%);
+            }
+            75% {
+                opacity: 0.4;
+                transform: translateX(-50%) translateY(-1%);
+            }
+        }
+
+        .spotlight-beam,
+        .spotlight-core,
+        .spotlight-glow,
+        .spotlight-shimmer {
+            transform: translateX(-50%) translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
+        .light-text-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .light-text {
+            color: white;
+            font-size: 1.9rem;
+            letter-spacing: 2px;
+            text-align: center;
+            text-shadow:
+                0 0 20px rgba(255,255,255,0.7),
+                0 0 40px rgba(180,180,255,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="left-panel">
+            <div class="light-background">
+                <div class="spotlight-beam position-center" id="spotlight">
+                    <div class="spotlight-core"></div>
+                    <div class="spotlight-glow"></div>
+                    <div class="spotlight-shimmer"></div>
+                </div>
+            </div>
+            <div class="light-text-overlay">
+                <div class="light-text" id="displayText">Cinematic Spotlight</div>
+            </div>
+        </div>
+        <div class="right-panel">
+            <div>
+                <h2>Light Background Test</h2>
+                <p>Use controls below to test positioning</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn" onclick="setPosition('left')">Left</button>
+        <button class="control-btn active" onclick="setPosition('center')">Center</button>
+        <button class="control-btn" onclick="setPosition('right')">Right</button>
+    </div>
+
+    <script>
+        function setPosition(position) {
+            const spotlight = document.getElementById('spotlight');
+            const buttons = document.querySelectorAll('.control-btn');
+            const displayText = document.getElementById('displayText');
+            
+            // Update spotlight position
+            spotlight.className = `spotlight-beam position-${position}`;
+            
+            // Update button states
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update text based on position
+            const texts = {
+                left: 'GDG Events & Workshops',
+                center: 'Welcome to GDG Gallery',
+                right: 'Tech Talks & Hackathons'
+            };
+            displayText.textContent = texts[position];
+        }
+    </script>
+</body>
+</html>

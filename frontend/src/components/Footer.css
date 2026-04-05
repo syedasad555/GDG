@@ -1,0 +1,73 @@
+/* Footer Social Icons */
+.footer-social-icons {
+    display: flex;
+    gap: 16px;
+}
+
+.footer-social-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff !important;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.footer-social-icon:hover {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* LinkedIn - Blue */
+.footer-linkedin {
+    background: #0A66C2;
+    border: 2px solid #0A66C2;
+}
+
+.footer-linkedin:hover {
+    background: #084a8f;
+    border-color: #084a8f;
+}
+
+/* Email - Red */
+.footer-email {
+    background: #EA4335;
+    border: 2px solid #EA4335;
+}
+
+.footer-email:hover {
+    background: #c23321;
+    border-color: #c23321;
+}
+
+/* Instagram - Pink/Purple Gradient */
+.footer-instagram {
+    background: linear-gradient(135deg, #E1306C 0%, #C13584 50%, #833AB4 100%);
+    border: 2px solid #E1306C;
+}
+
+.footer-instagram:hover {
+    background: linear-gradient(135deg, #c02a5f 0%, #a32f71 50%, #6d3096 100%);
+    border-color: #c02a5f;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-social-icons {
+        gap: 20px;
+    }
+
+    .footer-social-icon {
+        width: 52px;
+        height: 52px;
+    }
+    
+    .footer-social-icon:hover {
+        transform: translateY(-4px) scale(1.08);
+    }
+}
