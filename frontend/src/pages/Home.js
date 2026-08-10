@@ -116,7 +116,7 @@ const Home = () => {
       <Box
         sx={{
           background: '#FCD34D',
-          py: 8,
+          py: 5,
         }}
       >
         <Container maxWidth="lg">
@@ -126,7 +126,7 @@ const Home = () => {
             gutterBottom
             sx={{
               fontWeight: 800,
-              mb: 6,
+              mb: 4,
               color: '#1a1a1a',
               fontSize: isMobile ? '42px' : '64px',
               letterSpacing: '-0.02em',
@@ -171,10 +171,12 @@ const Home = () => {
                   textTransform: 'none',
                   borderRadius: '50px',
                   fontSize: '1.1rem',
-                  backgroundColor: '#ffffff',
-                  color: '#E87070',
+                  backgroundColor: '#1a1a1a',
+                  color: '#ffffff',
+                  fontWeight: 700,
                   '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    backgroundColor: '#333333',
+                    color: '#ffffff',
                   },
                 }}
               >

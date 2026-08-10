@@ -8,11 +8,20 @@ const HomeBlogCarousel = () => {
   const [loading, setLoading] = useState(true);
   const [dragStartX, setDragStartX] = useState(null);
   const [dragTranslate, setDragTranslate] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  );
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await blogApi.getAllBlogs({ limit: 6 });
+        const res = await blogApi.getAllBlogs({ limit: 12 });
         const list = res.data.data?.blogs || res.data.blogs || [];
         setBlogs(list);
       } catch (e) {
@@ -26,14 +35,41 @@ const HomeBlogCarousel = () => {
     fetchBlogs();
   }, []);
 
-  const next = () => {
-    if (!blogs.length) return;
-    setActiveIndex((prev) => (prev + 1) % blogs.length);
+  const getCardsPerView = () => {
+    if (windowWidth < 768) return 1;
+    return 2;
   };
 
-  const prev = () => {
-    if (!blogs.length) return;
-    setActiveIndex((prev) => (prev - 1 + blogs.length) % blogs.length);
+  const cardsPerView = getCardsPerView();
+
+  // Duplicate blog items when list is small so cycling through cards works seamlessly
+  const displayBlogs =
+    blogs.length > 1 && blogs.length < 6 ? [...blogs, ...blogs] : blogs;
+
+  const maxIndex = displayBlogs.length > cardsPerView ? displayBlogs.length - cardsPerView : 0;
+
+  useEffect(() => {
+    if (activeIndex > maxIndex && maxIndex >= 0) {
+      setActiveIndex(maxIndex);
+    }
+  }, [maxIndex, activeIndex]);
+
+  const next = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (!displayBlogs.length) return;
+    setActiveIndex((prevIndex) => (prevIndex >= maxIndex ? 0 : prevIndex + 1));
+  };
+
+  const prev = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (!displayBlogs.length) return;
+    setActiveIndex((prevIndex) => (prevIndex <= 0 ? maxIndex : prevIndex - 1));
   };
 
   const handleDragStart = (clientX) => {
@@ -48,7 +84,7 @@ const HomeBlogCarousel = () => {
 
   const handleDragEnd = () => {
     if (dragStartX === null) return;
-    const threshold = 80;
+    const threshold = 40;
     if (dragTranslate > threshold) {
       prev();
     } else if (dragTranslate < -threshold) {
@@ -78,6 +114,14 @@ const HomeBlogCarousel = () => {
     return plain;
   };
 
+  const getTransform = () => {
+    if (cardsPerView === 2) {
+      return `translateX(calc(-${activeIndex * 50}% - ${activeIndex * 12}px + ${dragTranslate}px))`;
+    } else {
+      return `translateX(calc(-${activeIndex * 100}% - ${activeIndex * 16}px + ${dragTranslate}px))`;
+    }
+  };
+
   if (loading || !blogs.length) return null;
 
   return (
@@ -87,7 +131,18 @@ const HomeBlogCarousel = () => {
         <h2 className="home-blog-title">News &amp; Updates</h2>
       </div>
 
-      <div className="home-blog-carousel">
+      <div className="blog-carousel-container">
+        {displayBlogs.length > cardsPerView && (
+          <button
+            type="button"
+            className="carousel-nav-btn prev-btn"
+            onClick={prev}
+            aria-label="Previous blogs"
+          >
+            ‹
+          </button>
+        )}
+
         <div
           className={`blog-viewport ${dragStartX !== null ? 'dragging' : ''}`}
           onMouseDown={(e) => handleDragStart(e.clientX)}
@@ -101,91 +156,97 @@ const HomeBlogCarousel = () => {
           <div
             className={`blog-track ${dragStartX !== null ? 'dragging' : ''}`}
             style={{
-              transform: `translateX(calc(-${activeIndex * 80}% + ${dragTranslate}px))`,
+              transform: getTransform(),
             }}
           >
-            {blogs.map((blog, index) => {
-              const prevIndex = (activeIndex - 1 + blogs.length) % blogs.length;
-              const nextIndex = (activeIndex + 1) % blogs.length;
+            {displayBlogs.map((blog, index) => (
+              <div key={`${blog._id}-${index}`} className="blog-slide">
+                <div className="blog-card">
+                  <div className="blog-main">
+                    <div className="blog-media">
+                      {blog.coverImage ? (
+                        <div className="blog-cover">
+                          <img
+                            src={getImageUrl(blog.coverImage)}
+                            alt={blog.title}
+                            draggable={false}
+                          />
+                        </div>
+                      ) : (
+                        <div className="blog-cover blog-cover-placeholder">
+                          <span>GDG</span>
+                        </div>
+                      )}
 
-              const slideClass = [
-                'blog-slide',
-                index === activeIndex ? 'active' : '',
-                index === prevIndex ? 'prev' : '',
-                index === nextIndex ? 'next' : '',
-              ]
-                .filter(Boolean)
-                .join(' ');
+                      {(blog.category || (blog.tags && blog.tags.length > 0)) && (
+                        <div className="blog-meta-under-image">
+                          {blog.category && (
+                            <div className="blog-category">{blog.category}</div>
+                          )}
 
-              return (
-                <div key={blog._id} className={slideClass}>
-                  <div className="blog-card">
-                    <div className="blog-main">
-                      <div className="blog-media">
-                        {blog.coverImage && (
-                          <div className="blog-cover">
-                            <img
-                              src={getImageUrl(blog.coverImage)}
-                              alt={blog.title}
-                            />
-                          </div>
-                        )}
+                          {blog.tags && blog.tags.length > 0 && (
+                            <div className="blog-tags">
+                              {blog.tags.slice(0, 3).map((tag, i) => (
+                                <span key={i}>#{tag}</span>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
 
-                        {(blog.category || (blog.tags && blog.tags.length > 0)) && (
-                          <div className="blog-meta-under-image">
-                            {blog.category && (
-                              <div className="blog-category">{blog.category}</div>
-                            )}
+                    <div className="blog-content">
+                      <h3 className="blog-title">{blog.title}</h3>
 
-                            {blog.tags && blog.tags.length > 0 && (
-                              <div className="blog-tags">
-                                {blog.tags.slice(0, 4).map((tag, i) => (
-                                  <span key={i}>{tag}</span>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
+                      {getExcerptText(blog) && (
+                        <p className="blog-excerpt">
+                          {getExcerptText(blog)}
+                        </p>
+                      )}
 
-                      <div className="blog-content">
-                        <h3 className="blog-title">{blog.title}</h3>
-
-                        {getExcerptText(blog) && (
-                          <p className="blog-excerpt">
-                            {getExcerptText(blog)}
-                          </p>
-                        )}
-
-                        {getContentFull(blog) && (
-                          <p className="blog-content-body">
-                            {getContentFull(blog)}
-                          </p>
-                        )}
-                      </div>
+                      {getContentFull(blog) && (
+                        <p className="blog-content-body">
+                          {getContentFull(blog)}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
 
+        {displayBlogs.length > cardsPerView && (
+          <button
+            type="button"
+            className="carousel-nav-btn next-btn"
+            onClick={next}
+            aria-label="Next blogs"
+          >
+            ›
+          </button>
+        )}
       </div>
 
-      <div className="blog-dots">
-        {blogs.map((_, i) => (
-          <button
-            key={i}
-            className={`blog-dot ${i === activeIndex ? 'active' : ''}`}
-            onClick={() => setActiveIndex(i)}
-            aria-label={`Go to slide ${i + 1}`}
-          />
-        ))}
-      </div>
+      {blogs.length > 1 && (
+        <div className="blog-dots">
+          {blogs.map((_, i) => (
+            <button
+              type="button"
+              key={i}
+              className={`blog-dot ${i === activeIndex % blogs.length ? 'active' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveIndex(i);
+              }}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 };
 
 export default HomeBlogCarousel;
-

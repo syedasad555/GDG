@@ -1,11 +1,11 @@
 /* Hero Section */
 .hero {
     background: #1a1d23;
-    min-height: 100vh;
+    min-height: 75vh;
     display: flex;
     align-items: center;
     position: relative;
-    padding: 60px 0;
+    padding: 40px 0;
     overflow: hidden;
 }
 

@@ -5,24 +5,43 @@
 }
 
 .team-section {
-  background: rgb(74, 181, 130);;
-  min-height: 80vh;
-  overflow-x: hidden;
+  background: rgb(74, 181, 130);
+  padding: 45px 20px 55px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.team-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.team-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #1a1a1a;
+  opacity: 0.85;
 }
 
 .team-title {
+  margin-top: 12px;
+  margin-bottom: 0;
+  font-family: 'Poppins', sans-serif;
   font-size: 52px;
   font-weight: 800;
   color: #1a1a1a;
-  margin-bottom: 20px;
   letter-spacing: -2px;
-  text-shadow: 2px 4px 8px rgba(0,0,0,0.15);
-  font-family: 'Poppins', sans-serif;
+  text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15);
+  line-height: 1.1;
   text-align: center;
 }
 
@@ -39,10 +58,6 @@
 .team-scroll-empty a {
   color: #0d47a1;
   font-weight: 700;
-}
-
-.grid-empty {
-  grid-column: 1 / -1;
 }
 
 .card-image-placeholder {
@@ -72,40 +87,12 @@
   text-decoration: underline;
 }
 
-.divider {
-  display: flex;
-  align-items: center;
-  margin-bottom: 50px;
-  width: 100%;
-  max-width: 400px;
-}
-
-.line {
-  flex-grow: 1;
-  height: 2px;
-  background: linear-gradient(
-    to right,
-    rgba(255,215,0,0),
-    rgba(255,215,0,0.7),
-    rgba(255,215,0,0)
-  );
-}
-
-.diamond {
-  width: 12px;
-  height: 12px;
-  background: #FFD700;
-  transform: rotate(45deg);
-  margin: 0 15px;
-  box-shadow: 0 0 12px rgba(255,215,0,0.6);
-}
-
 .scroll-wrapper {
   width: 100vw;
   overflow: hidden;
   position: relative;
   margin-left: calc(-50vw + 50%);
-  margin-bottom: 80px;
+  margin-bottom: 24px;
 }
 
 /* Scroll animation */
@@ -120,29 +107,6 @@
 @keyframes scroll-left {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
-}
-
-/* Grid Section Title */
-.grid-section-title {
-  font-size: 48px;
-  font-weight: 800;
-  color: #1a1a1a;
-  margin-bottom: 40px;
-  letter-spacing: -1px;
-  text-shadow: 2px 4px 8px rgba(0,0,0,0.15);
-  font-family: 'Poppins', sans-serif;
-  text-align: center;
-}
-
-/* Cards Grid */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
-  max-width: 1300px;
-  width: 100%;
-  padding: 0 20px;
-  margin-bottom: 50px;
 }
 
 /* Cards */
@@ -160,39 +124,18 @@
 }
 
 .scroll-card {
-  animation: none;
-}
-
-@keyframes floatCard {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.scroll-card {
-  width: 300px;
+  width: 330px;
   flex-shrink: 0;
 }
 
-.grid-card {
-  width: 100%;
-}
-
 .card:hover {
-  transform: translateY(-20px) rotateX(5deg) rotateY(5deg) scale(1.05);
-  box-shadow: 0 30px 50px rgba(0,0,0,0.15);
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 25px 45px rgba(0,0,0,0.15);
   z-index: 10;
 }
 
-.scroll-card:hover {
-  transform: translateY(-20px) rotateX(5deg) rotateY(5deg) scale(1.05);
-}
-
 .card-image-container {
-  height: 200px;
+  height: 230px;
   padding: 8px;
   overflow: hidden;
 }
@@ -206,18 +149,18 @@
 }
 
 .card:hover .card-image {
-  transform: scale(1.1) translateZ(30px);
+  transform: scale(1.08);
 }
 
 .card-content {
-  padding: 20px;
+  padding: 22px;
   text-align: left;
 }
 
 .card-name {
   font-size: 24px;
   font-weight: 900;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   font-family: 'Poppins', sans-serif;
   transition: color 0.3s ease;
   color: #333333;
@@ -270,15 +213,15 @@
 .view-more-container {
   display: flex;
   justify-content: center;
-  margin-top: 5px;
-  margin-bottom: 15px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .view-more-button {
   background: #1a1a1a;
   color: white;
-  padding: 16px 48px;
-  font-size: 18px;
+  padding: 14px 44px;
+  font-size: 17px;
   font-weight: 700;
   border-radius: 50px;
   text-decoration: none;
@@ -297,28 +240,17 @@
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 768px) {
   .team-section {
-    padding: 40px 16px;
+    padding: 40px 16px 60px;
   }
 
   .scroll-card {
-    width: 200px;
+    width: 220px;
   }
 
   .card-image-container {
     height: 160px;
-  }
-
-  .grid-section-title {
-    font-size: 36px;
-    margin-bottom: 30px;
   }
 
   .card-name {
@@ -335,38 +267,20 @@
 
   .team-title {
     font-size: 36px;
-    margin-bottom: 40px;
-  }
-
-  .divider {
-    margin-bottom: 30px;
   }
 
   .scroll-wrapper {
-    margin-bottom: 60px;
+    margin-bottom: 28px;
   }
 }
 
 @media (max-width: 500px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
-
   .team-title {
     font-size: 28px;
   }
 
-  .card-image-container {
-    height: 150px;
-  }
-
-  .grid-section-title {
-    font-size: 28px;
-    margin-bottom: 25px;
-  }
-
   .view-more-button {
-    padding: 14px 36px;
-    font-size: 16px;
+    padding: 12px 32px;
+    font-size: 15px;
   }
 }

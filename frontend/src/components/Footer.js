@@ -118,7 +118,7 @@ const Footer = () => {
             © {currentYear} GDG College Club. All rights reserved.
           </Typography>
           <Typography variant="body2" sx={{ color: '#9aa0a6' }}>
-            Made with ❤️ by the GDG Community
+            Website developed by Sahith Guttikonda and Syed Asad
           </Typography>
         </Box>
       </Container>

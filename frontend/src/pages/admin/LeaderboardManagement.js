@@ -306,15 +306,33 @@ const LeaderboardManagement = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 8 }}>
-      <Box sx={{ mb: 6 }}>
-        <Typography variant="h3" component="h1" sx={{ fontWeight: 700, mb: 2 }}>
-          Leaderboard Management
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          Upload contest scores to update the leaderboard
-        </Typography>
-      </Box>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+        py: 6,
+      }}
+    >
+      <Container maxWidth="lg">
+        {/* Header Card */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: 4,
+            mb: 4,
+            borderRadius: 4,
+            background: 'linear-gradient(135deg, #4A8BC2 0%, #2E75B0 100%)',
+            color: '#ffffff',
+            boxShadow: '0 10px 30px rgba(46, 117, 176, 0.3)',
+          }}
+        >
+          <Typography variant="h3" component="h1" sx={{ fontWeight: 800, mb: 1, fontSize: { xs: '1.8rem', md: '2.5rem' } }}>
+            Leaderboard Management
+          </Typography>
+          <Typography variant="body1" sx={{ opacity: 0.9 }}>
+            Upload contest scores and manage student leaderboards
+          </Typography>
+        </Paper>
 
       {error && (
         <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError('')}>
@@ -573,7 +591,8 @@ Jane Smith,jane@example.com,IT002,95,CodeChef`}
           </Button>
         </DialogActions>
       </Dialog>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 

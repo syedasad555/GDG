@@ -94,10 +94,10 @@ const Navbar = () => {
           </ListItem>
         ))}
       </List>
-      <Divider />
-      <List>
-        {isAuthenticated ? (
-          <>
+      {isAuthenticated && (
+        <>
+          <Divider />
+          <List>
             <ListItem
               button
               component={RouterLink}
@@ -120,19 +120,9 @@ const Navbar = () => {
               <ListItemIcon><LogoutIcon /></ListItemIcon>
               <ListItemText primary="Logout" />
             </ListItem>
-          </>
-        ) : (
-          <ListItem
-            button
-            component={RouterLink}
-            to="/login"
-            onClick={handleDrawerToggle}
-          >
-            <ListItemIcon><PersonIcon /></ListItemIcon>
-            <ListItemText primary="Admin login" />
-          </ListItem>
-        )}
-      </List>
+          </List>
+        </>
+      )}
     </Box>
   );
 
@@ -165,8 +155,8 @@ const Navbar = () => {
                 display: 'flex',
                 alignItems: 'center',
                 textDecoration: 'none',
-                mr: 4,
-                ml: 0,
+                flex: { md: 1 },
+                justifyContent: 'flex-start',
                 transition: 'transform 0.2s ease',
                 '&:hover': {
                   transform: 'scale(1.02)',
@@ -200,22 +190,8 @@ const Navbar = () => {
               </Typography>
             </Box>
 
-            {isMobile ? (
-              <IconButton
-                aria-label="open drawer"
-                edge="end"
-                onClick={handleDrawerToggle}
-                sx={{
-                  color: 'rgba(39, 38, 38, 0.8)',
-                  '&:hover': {
-                    backgroundColor: 'rgba(66, 133, 244, 0.08)',
-                  },
-                }}
-              >
-                <MenuIcon />
-              </IconButton>
-            ) : (
-              <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1, justifyContent: 'flex-end' }}>
+            {!isMobile && (
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {menuItems.map((item) => (
                   <Button
                     key={item.text}
@@ -267,7 +243,12 @@ const Navbar = () => {
                     </Box>
                   </Button>
                 ))}
-                {isAuthenticated ? (
+              </Box>
+            )}
+
+            {!isMobile && (
+              <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                {isAuthenticated && (
                   <>
                     <IconButton
                       onClick={handleMenu}
@@ -390,55 +371,24 @@ const Navbar = () => {
                       </MenuItem>
                     </Menu>
                   </>
-                ) : (
-                  <Button
-                    component={RouterLink}
-                    to="/login"
-                    variant="contained"
-                    sx={{ 
-                      ml: 2.5,
-                      px: 3.5,
-                      py: 1.25,
-                      backgroundColor: '#4285F4',
-                      color: '#ffffff',
-                      fontWeight: 700,
-                      fontSize: '0.975rem',
-                      letterSpacing: '0.5px',
-                      textTransform: 'none',
-                      fontFamily: "'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif",
-                      borderRadius: '12px',
-                      boxShadow: '0 4px 12px rgba(66, 133, 244, 0.35)',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      '&::before': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: '-100%',
-                        width: '100%',
-                        height: '100%',
-                        background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent)',
-                        transition: 'left 0.5s ease',
-                      },
-                      '&:hover': {
-                        backgroundColor: '#357ae8',
-                        boxShadow: '0 6px 20px rgba(66, 133, 244, 0.45)',
-                        transform: 'translateY(-2px)',
-                        '&::before': {
-                          left: '100%',
-                        },
-                      },
-                      '&:active': {
-                        transform: 'translateY(0)',
-                        backgroundColor: '#3367d6',
-                      },
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    }}
-                  >
-                    Admin login
-                  </Button>
                 )}
               </Box>
+            )}
+
+            {isMobile && (
+              <IconButton
+                aria-label="open drawer"
+                edge="end"
+                onClick={handleDrawerToggle}
+                sx={{
+                  color: 'rgba(39, 38, 38, 0.8)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(66, 133, 244, 0.08)',
+                  },
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
             )}
           </Toolbar>
         </Container>

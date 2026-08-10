@@ -17,6 +17,7 @@ import {
   Menu,
   MenuItem,
   Pagination,
+  Paper,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -226,20 +227,57 @@ const AdminEvents = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 8 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 6 }}>
-        <Typography variant="h3" component="h1" sx={{ fontWeight: 700 }}>
-          Event Management
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpenDialog()}
+    <Box
+      sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #eef2f8 0%, #d9e2ec 100%)',
+        py: 6,
+      }}
+    >
+      <Container maxWidth="lg">
+        {/* Header Card */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: 4,
+            mb: 4,
+            borderRadius: 4,
+            background: 'linear-gradient(135deg, #4A8BC2 0%, #2E75B0 100%)',
+            color: '#ffffff',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            boxShadow: '0 10px 30px rgba(46, 117, 176, 0.3)',
+          }}
         >
-          Create Event
-        </Button>
-      </Box>
+          <Box>
+            <Typography variant="h3" component="h1" sx={{ fontWeight: 800, mb: 1, fontSize: { xs: '1.8rem', md: '2.5rem' } }}>
+              Event Management
+            </Typography>
+            <Typography variant="body1" sx={{ opacity: 0.9 }}>
+              Create, update, and manage all events for the GDG College Club
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => handleOpenDialog()}
+            sx={{
+              backgroundColor: '#ffffff',
+              color: '#2E75B0',
+              fontWeight: 700,
+              px: 3,
+              py: 1.2,
+              borderRadius: 3,
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+              '&:hover': {
+                backgroundColor: '#f0f4f8',
+              },
+            }}
+          >
+            Create Event
+          </Button>
+        </Paper>
 
       {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
       {success && <Alert severity="success" sx={{ mb: 3 }}>{success}</Alert>}
@@ -500,7 +538,8 @@ const AdminEvents = () => {
           </DialogActions>
         </form>
       </Dialog>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 

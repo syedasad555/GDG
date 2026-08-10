@@ -31,7 +31,6 @@ const TeamScroll = () => {
     fetchTeam();
   }, []);
 
-  const gridTeamMembers = teamMembers.slice(0, 4);
   const duplicatedMembers = teamMembers.length ? [...teamMembers, ...teamMembers] : [];
 
   useEffect(() => {
@@ -67,7 +66,10 @@ const TeamScroll = () => {
 
   return (
     <div className="team-section">
-      <h1 className="team-title">Meet Our Team</h1>
+      <div className="team-header">
+        <span className="team-label">OUR TEAM</span>
+        <h2 className="team-title">Meet Our Team</h2>
+      </div>
 
       {loading ? (
         <p className="team-scroll-loading">Loading…</p>
@@ -119,45 +121,6 @@ const TeamScroll = () => {
         <Link to="/team" className="view-more-button">
           View More
         </Link>
-      </div>
-
-      <h2 className="grid-section-title">GDG Website Developers</h2>
-
-      <div className="cards-grid">
-        {!loading && gridTeamMembers.length === 0 ? (
-          <p className="team-scroll-empty grid-empty">Add team members in admin to show them here.</p>
-        ) : (
-          gridTeamMembers.map((member) => (
-            <div key={`grid-${member._id}`} className="card grid-card">
-              <div className="card-image-container">
-                {member.photo ? (
-                  <img
-                    src={resolveUploadUrl(member.photo)}
-                    alt={member.name}
-                    className="card-image"
-                  />
-                ) : (
-                  <div className="card-image card-image-placeholder">{member.name?.charAt(0) || "?"}</div>
-                )}
-              </div>
-
-              <div className="card-content">
-                <h3 className="card-name">{member.name}</h3>
-                <p className="card-title">{member.role}</p>
-                {member.linkedInUrl ? (
-                  <a
-                    className="card-linkedin"
-                    href={member.linkedInUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    LinkedIn
-                  </a>
-                ) : null}
-              </div>
-            </div>
-          ))
-        )}
       </div>
     </div>
   );

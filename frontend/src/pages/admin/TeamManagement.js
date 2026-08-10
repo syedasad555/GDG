@@ -205,20 +205,57 @@ const TeamManagement = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 8 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 6, flexWrap: 'wrap', gap: 2 }}>
-        <Typography variant="h3" component="h1" sx={{ fontWeight: 700 }}>
-          Team management
-        </Typography>
-        <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleOpenAdd}>
-          Add team member
-        </Button>
-      </Box>
-
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3, maxWidth: 720 }}>
-        Add photos, names, and LinkedIn profiles. These appear on the public{' '}
-        <strong>Team</strong> page. Role defaults are suggested per group; you can pick another from the list.
-      </Typography>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+        py: 6,
+      }}
+    >
+      <Container maxWidth="lg">
+        {/* Header Card */}
+        <Paper
+          elevation={0}
+          sx={{
+            p: 4,
+            mb: 4,
+            borderRadius: 4,
+            background: 'linear-gradient(135deg, #54AC58 0%, #3E9642 100%)',
+            color: '#ffffff',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            boxShadow: '0 10px 30px rgba(62, 150, 66, 0.3)',
+          }}
+        >
+          <Box>
+            <Typography variant="h3" component="h1" sx={{ fontWeight: 800, mb: 1, fontSize: { xs: '1.8rem', md: '2.5rem' } }}>
+              Team Management
+            </Typography>
+            <Typography variant="body1" sx={{ opacity: 0.9 }}>
+              Add photos, names, roles, and LinkedIn links for the public Team page
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleOpenAdd}
+            sx={{
+              backgroundColor: '#ffffff',
+              color: '#3E9642',
+              fontWeight: 700,
+              px: 3,
+              py: 1.2,
+              borderRadius: 3,
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+              '&:hover': {
+                backgroundColor: '#f0fdf4',
+              },
+            }}
+          >
+            Add Team Member
+          </Button>
+        </Paper>
 
       {error && (
         <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError('')}>
@@ -387,7 +424,8 @@ const TeamManagement = () => {
           </DialogActions>
         </form>
       </Dialog>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 
