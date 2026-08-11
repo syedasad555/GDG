@@ -73,7 +73,7 @@ exports.getEventById = async (req, res) => {
 
 exports.createEvent = async (req, res) => {
   try {
-    const { title, description, context, date, time, venue, category, tags, speaker, registrationEndTime } = req.body;
+    const { title, description, context, date, time, venue, category, tags, speaker, registrationEndTime, teamSize, teamMembers } = req.body;
 
     const eventData = {
       title,
@@ -86,6 +86,8 @@ exports.createEvent = async (req, res) => {
       tags: tags ? tags.split(',') : [],
       speaker: speaker ? JSON.parse(speaker) : null,
       registrationEndTime: registrationEndTime || null,
+      teamSize: category === 'Hackathon' ? teamSize ?? null : null,
+      teamMembers: category === 'Hackathon' ? teamMembers ?? null : null,
       createdBy: req.user.id,
       isPublished: true
     };
@@ -126,7 +128,7 @@ exports.createEvent = async (req, res) => {
 
 exports.updateEvent = async (req, res) => {
   try {
-    const { title, description, context, date, time, venue, category, tags, speaker, isPublished, registrationEndTime } = req.body;
+    const { title, description, context, date, time, venue, category, tags, speaker, isPublished, registrationEndTime, teamSize, teamMembers } = req.body;
 
     const updateData = {
       title,
@@ -139,6 +141,8 @@ exports.updateEvent = async (req, res) => {
       tags: tags ? tags.split(',') : [],
       speaker: speaker ? JSON.parse(speaker) : null,
       registrationEndTime: registrationEndTime || null,
+      teamSize: category === 'Hackathon' ? teamSize ?? null : null,
+      teamMembers: category === 'Hackathon' ? teamMembers ?? null : null,
       isPublished
     };
 
@@ -211,7 +215,7 @@ exports.deleteEvent = async (req, res) => {
 
 exports.registerEvent = async (req, res) => {
   try {
-    const { name, email, phone, rollNumber, branch, year } = req.body;
+    const { name, email, phone, rollNumber, branch, year, teamName, members } = req.body;
     const emailNorm = email ? String(email).trim().toLowerCase() : '';
 
     if (!name || !emailNorm || !rollNumber) {
@@ -228,6 +232,40 @@ exports.registerEvent = async (req, res) => {
         status: 'fail',
         message: 'Event not found'
       });
+    }
+
+    // Hackathon-specific validation
+    if (event.category === 'Hackathon') {
+      if (!teamName || !String(teamName).trim()) {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Please provide a team name for hackathon registration'
+        });
+      }
+
+      if (!members || !Array.isArray(members) || members.length === 0) {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'Please add at least one team member'
+        });
+      }
+
+      if (event.teamSize && members.length > event.teamSize - 1) {
+        return res.status(400).json({
+          status: 'fail',
+          message: `Team can have at most ${event.teamSize} members (including team lead)`
+        });
+      }
+
+      for (let i = 0; i < members.length; i++) {
+        const m = members[i];
+        if (!m.name || !m.rollNumber || !m.email) {
+          return res.status(400).json({
+            status: 'fail',
+            message: `Please provide name, roll number, and email for team member ${i + 1}`
+          });
+        }
+      }
     }
 
     const alreadyRegistered = event.registrations.some(
@@ -254,15 +292,26 @@ exports.registerEvent = async (req, res) => {
       });
     }
 
-    event.registrations.push({
+    const registrationEntry = {
       name: String(name).trim(),
       email: String(email).trim(),
       phone: phone ? String(phone).trim() : '',
       rollNumber: String(rollNumber).trim(),
       branch: branch ? String(branch).trim() : '',
       year: year !== undefined && year !== null ? String(year) : ''
-    });
+    };
 
+    if (event.category === 'Hackathon') {
+      registrationEntry.teamName = String(teamName).trim();
+      registrationEntry.members = members.map((m) => ({
+        name: String(m.name).trim(),
+        rollNumber: String(m.rollNumber).trim(),
+        phone: m.phone ? String(m.phone).trim() : '',
+        email: String(m.email).trim()
+      }));
+    }
+
+    event.registrations.push(registrationEntry);
     event.registeredCount = event.registrations.length;
     await event.save();
 

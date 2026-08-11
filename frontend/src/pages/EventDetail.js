@@ -28,6 +28,7 @@ import {
   Person as PersonIcon,
   ArrowBack as ArrowBackIcon,
   Close as CloseIcon,
+  Groups as GroupsIcon,
 } from '@mui/icons-material';
 import { format, parseISO, isFuture } from 'date-fns';
 import * as eventApi from '../api/events';
@@ -68,6 +69,8 @@ const EventDetail = () => {
     rollNumber: '',
     branch: '',
     year: '',
+    teamName: '',
+    members: [],
   });
 
   useEffect(() => {
@@ -91,7 +94,13 @@ const EventDetail = () => {
     fetchEvent();
   }, [id]);
 
+  const isHackathon = event?.category === 'Hackathon';
+  const maxTeamSize = event?.teamSize || 4;
+
   const handleRegistrationOpen = () => {
+    const emptyMembers = isHackathon
+      ? Array.from({ length: maxTeamSize - 1 }, () => ({ name: '', rollNumber: '', phone: '', email: '' }))
+      : [];
     setRegistrationData({
       name: '',
       email: '',
@@ -99,6 +108,8 @@ const EventDetail = () => {
       rollNumber: '',
       branch: '',
       year: '',
+      teamName: '',
+      members: emptyMembers,
     });
     setRegistrationOpen(true);
   };
@@ -115,10 +126,26 @@ const EventDetail = () => {
     }));
   };
 
+  const handleMemberChange = (index, field, value) => {
+    setRegistrationData((prev) => {
+      const updated = [...prev.members];
+      updated[index] = { ...updated[index], [field]: value };
+      return { ...prev, members: updated };
+    });
+  };
+
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
     try {
-      await eventApi.registerEvent(id, registrationData);
+      const payload = { ...registrationData };
+      if (isHackathon) {
+        // Filter out empty member rows (where name is blank)
+        payload.members = registrationData.members.filter((m) => m.name.trim() !== '');
+      } else {
+        delete payload.teamName;
+        delete payload.members;
+      }
+      await eventApi.registerEvent(id, payload);
       setIsRegistered(true);
       sessionStorage.setItem(`gdg_event_reg_${id}`, '1');
       setRegistrationOpen(false);
@@ -480,6 +507,35 @@ const EventDetail = () => {
                   </Box>
                 )}
 
+                {event.category === 'Hackathon' && event.teamSize && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      mb: 2,
+                      pb: 2,
+                      borderBottom: '1px solid',
+                      borderColor: 'divider',
+                    }}
+                  >
+                    <GroupsIcon
+                      sx={{ mr: 2, color: 'primary.main', mt: 0.5 }}
+                    />
+                    <Box>
+                      <Typography variant="subtitle2" fontWeight={600}>
+                        Team Info
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Max {event.teamSize} members per team
+                      </Typography>
+                      {event.teamMembers && (
+                        <Typography variant="body2" color="text.secondary">
+                          {event.teamMembers} total participants allowed
+                        </Typography>
+                      )}
+                    </Box>
+                  </Box>
+                )}
+
                 {event.speaker && (
                   <Box
                     sx={{
@@ -529,7 +585,7 @@ const EventDetail = () => {
             }}
           >
             <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
-              Register for {event.title}
+              {isHackathon ? 'Team Registration' : 'Register'} for {event.title}
             </Typography>
             <IconButton
               aria-label="close"
@@ -546,6 +602,11 @@ const EventDetail = () => {
         </DialogTitle>
         <form onSubmit={handleRegistrationSubmit}>
           <DialogContent dividers>
+            {isHackathon && (
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
+                Team Lead Details
+              </Typography>
+            )}
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -553,7 +614,7 @@ const EventDetail = () => {
                   fullWidth
                   id="name"
                   name="name"
-                  label="Full Name"
+                  label={isHackathon ? 'Team Lead Name' : 'Full Name'}
                   value={registrationData.name}
                   onChange={handleRegistrationChange}
                   margin="normal"
@@ -635,6 +696,83 @@ const EventDetail = () => {
                   <option value="4">4th Year</option>
                 </TextField>
               </Grid>
+
+              {/* Hackathon Team Fields */}
+              {isHackathon && (
+                <>
+                  <Grid item xs={12}>
+                    <Box sx={{ mt: 2, mb: 1, borderTop: '1px solid', borderColor: 'divider', pt: 2 }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                        Team Details
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Max team size: {maxTeamSize} (including you as team lead)
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="teamName"
+                      name="teamName"
+                      label="Team Name"
+                      value={registrationData.teamName}
+                      onChange={handleRegistrationChange}
+                      margin="normal"
+                    />
+                  </Grid>
+
+                  {registrationData.members.map((member, idx) => (
+                    <Grid item xs={12} key={idx}>
+                      <Box sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2, mb: 1 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                          Team Member {idx + 1}
+                        </Typography>
+                        <Grid container spacing={2}>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              fullWidth
+                              label="Name"
+                              value={member.name}
+                              onChange={(e) => handleMemberChange(idx, 'name', e.target.value)}
+                              size="small"
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              fullWidth
+                              label="Roll Number"
+                              value={member.rollNumber}
+                              onChange={(e) => handleMemberChange(idx, 'rollNumber', e.target.value)}
+                              size="small"
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              fullWidth
+                              label="Email"
+                              type="email"
+                              value={member.email}
+                              onChange={(e) => handleMemberChange(idx, 'email', e.target.value)}
+                              size="small"
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={6}>
+                            <TextField
+                              fullWidth
+                              label="Phone Number"
+                              value={member.phone}
+                              onChange={(e) => handleMemberChange(idx, 'phone', e.target.value)}
+                              size="small"
+                            />
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </Grid>
+                  ))}
+                </>
+              )}
             </Grid>
           </DialogContent>
           <DialogActions sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider' }}>

@@ -30,6 +30,32 @@ const eventSchema = new mongoose.Schema({
     enum: ['Workshop', 'Hackathon', 'Talk', 'Conference', 'Webinar', 'Meetup'],
     required: true
   },
+
+  // Hackathon-specific fields (only required when category is Hackathon)
+  teamSize: {
+    type: Number,
+    default: null,
+    validate: {
+      validator: function (v) {
+        // For non-hackathon events, allow null/undefined.
+        if (this.category !== 'Hackathon') return true;
+        // For hackathon, require a positive number.
+        return typeof v === 'number' && v > 0;
+      },
+      message: 'teamSize must be a positive number for Hackathon events'
+    }
+  },
+  teamMembers: {
+    type: Number,
+    default: null,
+    validate: {
+      validator: function (v) {
+        if (this.category !== 'Hackathon') return true;
+        return typeof v === 'number' && v > 0;
+      },
+      message: 'teamMembers must be a positive number for Hackathon events'
+    }
+  },
   tags: [String],
   speaker: {
     name: String,
@@ -77,6 +103,14 @@ const eventSchema = new mongoose.Schema({
     rollNumber: String,
     branch: String,
     year: String,
+    // Hackathon team registration fields
+    teamName: String,
+    members: [{
+      name: String,
+      rollNumber: String,
+      phone: String,
+      email: String
+    }],
     registeredAt: {
       type: Date,
       default: Date.now

@@ -53,6 +53,8 @@ const AdminEvents = () => {
     venue: '',
     category: '',
     registrationEndTime: '',
+    teamSize: '',
+    teamMembers: '',
   });
 
   useEffect(() => {
@@ -91,6 +93,8 @@ const AdminEvents = () => {
         venue: event.venue || '',
         category: event.category || '',
         registrationEndTime: event.registrationEndTime ? new Date(event.registrationEndTime).toISOString().slice(0, 16) : '',
+        teamSize: event.teamSize ?? '',
+        teamMembers: event.teamMembers ?? '',
       });
     } else {
       setEditingId(null);
@@ -103,6 +107,8 @@ const AdminEvents = () => {
         venue: '',
         category: '',
         registrationEndTime: '',
+        teamSize: '',
+        teamMembers: '',
       });
     }
     setOpenDialog(true);
@@ -131,6 +137,14 @@ const AdminEvents = () => {
         ...formData,
         date: new Date(formData.date).toISOString(),
         registrationEndTime: formData.registrationEndTime ? new Date(formData.registrationEndTime).toISOString() : null,
+        teamSize:
+          formData.category === 'Hackathon' && formData.teamSize !== ''
+            ? Number(formData.teamSize)
+            : null,
+        teamMembers:
+          formData.category === 'Hackathon' && formData.teamMembers !== ''
+            ? Number(formData.teamMembers)
+            : null,
       };
 
       if (editingId) {
@@ -449,6 +463,51 @@ const AdminEvents = () => {
           <DialogContent dividers sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
               fullWidth
+              label="Category"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              select
+              SelectProps={{ native: true }}
+              required
+            >
+              <option value=""></option>
+              <option value="Workshop">Workshop</option>
+              <option value="Hackathon">Hackathon</option>
+              <option value="Talk">Talk</option>
+              <option value="Conference">Conference</option>
+              <option value="Webinar">Webinar</option>
+              <option value="Meetup">Meetup</option>
+            </TextField>
+
+            {formData.category === 'Hackathon' && (
+              <>
+                <TextField
+                  fullWidth
+                  label="Team Size"
+                  name="teamSize"
+                  type="number"
+                  value={formData.teamSize}
+                  onChange={handleChange}
+                  required
+                  inputProps={{ min: 2 }}
+                  helperText="Max members per team (including team lead)"
+                />
+                <TextField
+                  fullWidth
+                  label="Max Participants"
+                  name="teamMembers"
+                  type="number"
+                  value={formData.teamMembers}
+                  onChange={handleChange}
+                  inputProps={{ min: 1 }}
+                  helperText="Total number of participants allowed (optional)"
+                />
+              </>
+            )}
+
+            <TextField
+              fullWidth
               label="Event Title"
               name="title"
               value={formData.title}
@@ -501,22 +560,6 @@ const AdminEvents = () => {
               value={formData.venue}
               onChange={handleChange}
             />
-            <TextField
-              fullWidth
-              label="Category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              select
-              SelectProps={{ native: true }}
-            >
-              <option value=""></option>
-              <option value="Workshop">Workshop</option>
-              <option value="Talk">Talk</option>
-              <option value="Hackathon">Hackathon</option>
-              <option value="Meetup">Meetup</option>
-              <option value="Competition">Competition</option>
-            </TextField>
             <TextField
               fullWidth
               label="Registration End Time"

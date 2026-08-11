@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <g fill="none" stroke-width="8.5" stroke-linecap="round">
+    <!-- Red: Top arm of '<' -->
+    <line x1="28" y1="16" x2="14" y2="28" stroke="#EA4335" />
+    <!-- Blue: Bottom arm of '<' -->
+    <line x1="14" y1="36" x2="28" y2="48" stroke="#4285F4" />
+    <!-- Green: Top arm of '>' -->
+    <line x1="36" y1="16" x2="50" y2="28" stroke="#34A853" />
+    <!-- Yellow: Bottom arm of '>' -->
+    <line x1="50" y1="36" x2="36" y2="48" stroke="#FBBC05" />
+  </g>
+</svg>
