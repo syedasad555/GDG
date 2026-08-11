@@ -41,7 +41,12 @@ axios.interceptors.request.use(attachToken, (error) => Promise.reject(error));
 const onUnauthorized = (error) => {
   if (error.response?.status === 401) {
     localStorage.removeItem('token');
-    window.location.href = '/login';
+
+    // Keep public pages usable even if a background/admin-only request 401s.
+    // AdminRoute will still protect admin screens and send users to login.
+    if (window.location.pathname.startsWith('/admin')) {
+      window.location.href = '/login';
+    }
   }
   return Promise.reject(error);
 };
