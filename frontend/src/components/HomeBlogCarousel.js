@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as blogApi from '../api/blogs';
+import { resolveUploadUrl } from '../utils/resolveUploadUrl';
 import './HomeBlogCarousel.css';
 
 const HomeBlogCarousel = () => {
@@ -96,8 +97,7 @@ const HomeBlogCarousel = () => {
 
   const getImageUrl = (imagePath) => {
     if (!imagePath) return null;
-    if (imagePath.startsWith('http')) return imagePath;
-    return `http://localhost:5000${imagePath}`;
+    return resolveUploadUrl(imagePath);
   };
 
   const getExcerptText = (blog) => {

@@ -1,11 +1,8 @@
 import React from 'react';
+import { resolveUploadUrl } from '../../utils/resolveUploadUrl';
 
 const GalleryCard = ({ item, index, stackPosition, isActive, wasActive, totalCards, onClick }) => {
-  const getImageUrl = (path) => {
-    if (!path) return '';
-    if (path.startsWith('http')) return path;
-    return `http://localhost:5000${path}`;
-  };
+  const getImageUrl = (path) => resolveUploadUrl(path);
 
   // Calculate rotation angle based on stack position
   // Active card: 0deg, others: slight rotation

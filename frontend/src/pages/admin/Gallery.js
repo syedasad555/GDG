@@ -29,6 +29,7 @@ import {
   Image as ImageIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
+import { resolveUploadUrl } from '../../utils/resolveUploadUrl';
 
 const AdminGallery = () => {
   const [gallery, setGallery] = useState([]);
@@ -75,10 +76,10 @@ const AdminGallery = () => {
         category: item.category,
         description: item.description || '',
       });
-      setImagePreviews(item.images ? item.images.map(img => `http://localhost:5000${img.url}`) : []);
+      setImagePreviews(item.images ? item.images.map((img) => resolveUploadUrl(img.url)) : []);
       // Do not preload files for upload; previews only
       setSelectedFiles([]);
-      setTitleImagePreview(item.titleImage ? `http://localhost:5000${item.titleImage}` : '');
+      setTitleImagePreview(item.titleImage ? resolveUploadUrl(item.titleImage) : '');
     } else {
       setEditingId(null);
       setFormData({
@@ -396,7 +397,7 @@ const AdminGallery = () => {
                     {item.titleImage && (
                       <Box
                         component="img"
-                        src={`http://localhost:5000${item.titleImage}`}
+                        src={resolveUploadUrl(item.titleImage)}
                         alt={item.title}
                         sx={{
                           width: 60,
