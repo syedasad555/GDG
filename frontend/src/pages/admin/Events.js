@@ -47,7 +47,6 @@ const AdminEvents = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    context: '',
     date: '',
     time: '',
     venue: '',
@@ -87,7 +86,6 @@ const AdminEvents = () => {
       setFormData({
         title: event.title,
         description: event.description,
-        context: event.context || '',
         date: event.date?.split('T')[0] || '',
         time: event.time || '',
         venue: event.venue || '',
@@ -101,7 +99,6 @@ const AdminEvents = () => {
       setFormData({
         title: '',
         description: '',
-        context: '',
         date: '',
         time: '',
         venue: '',
@@ -522,17 +519,6 @@ const AdminEvents = () => {
               onChange={handleChange}
               multiline
               rows={6}
-            />
-            <TextField
-              fullWidth
-              label="Context"
-              name="context"
-              value={formData.context}
-              onChange={handleChange}
-              multiline
-              rows={2}
-              placeholder="This text will be displayed on the back of the card in admin view"
-              helperText="Context text shown when card is flipped in admin view"
             />
             <TextField
               fullWidth
