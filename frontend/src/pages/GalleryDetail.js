@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import axios from 'axios';
+import { resolveUploadUrl } from '../utils/resolveUploadUrl';
 
 const GalleryDetail = () => {
   const { id } = useParams();
@@ -39,11 +40,7 @@ const GalleryDetail = () => {
     }
   }, [id]);
 
-  const getImageUrl = (path) => {
-    if (!path) return '';
-    if (path.startsWith('http')) return path;
-    return `http://localhost:5000${path}`;
-  };
+  const getImageUrl = (path) => resolveUploadUrl(path);
 
   if (loading) {
     return (

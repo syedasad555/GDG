@@ -1,11 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
+import { resolveUploadUrl } from '../../utils/resolveUploadUrl';
 
 const GalleryModal = ({ item, onClose }) => {
-  const getImageUrl = (path) => {
-    if (!path) return '';
-    if (path.startsWith('http')) return path;
-    return `http://localhost:5000${path}`;
-  };
+  const getImageUrl = (path) => resolveUploadUrl(path);
 
   const handleKeyDown = useCallback(
     (e) => {

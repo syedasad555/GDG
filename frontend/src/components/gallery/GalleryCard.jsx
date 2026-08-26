@@ -1,11 +1,8 @@
 import React from 'react';
+import { resolveUploadUrl } from '../../utils/resolveUploadUrl';
 
 const GalleryCard = ({ item, index, isActive, totalCards, onClick }) => {
-  const getImageUrl = (path) => {
-    if (!path) return '';
-    if (path.startsWith('http')) return path;
-    return `http://localhost:5000${path}`;
-  };
+  const getImageUrl = (path) => resolveUploadUrl(path);
 
   const cardStyle = {
     '--index': index,

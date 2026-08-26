@@ -397,9 +397,9 @@ const Contests = () => {
                     },
                   }}
                 >
-                <CardContent sx={{ flexGrow: 1, p: 4, position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
+                <CardContent sx={{ flexGrow: 1, p: 3, position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
                   {/* Header with Icon */}
-                  <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 2 }}>
                     <Box sx={{ flex: 1, pr: 2 }}>
                       <Typography variant="h5" sx={{ 
                         fontWeight: 800,
@@ -413,9 +413,9 @@ const Contests = () => {
                       </Typography>
                     </Box>
                     <Box sx={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 3,
+                      width: 48,
+                      height: 48,
+                      borderRadius: 2.5,
                       background: cardColor.gradient,
                       display: 'flex',
                       alignItems: 'center',
@@ -430,7 +430,7 @@ const Contests = () => {
                       <EmojiEventsIcon
                         sx={{
                           color: '#fff',
-                          fontSize: 36,
+                          fontSize: 28,
                         }}
                       />
                     </Box>
@@ -439,11 +439,11 @@ const Contests = () => {
                   {/* Description */}
                   <Typography variant="body2" sx={{ 
                     color: 'rgba(0,0,0,0.7)',
-                    mb: 3,
-                    lineHeight: 1.7,
-                    fontSize: '0.95rem',
+                    mb: 2,
+                    lineHeight: 1.6,
+                    fontSize: '0.9rem',
                     display: '-webkit-box',
-                    WebkitLineClamp: 3,
+                    WebkitLineClamp: 2,
                     WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
                   }}>
@@ -451,7 +451,7 @@ const Contests = () => {
                   </Typography>
 
                   {/* Platform Badge */}
-                  <Box sx={{ mb: 3 }}>
+                  <Box sx={{ mb: 2 }}>
                     <Chip
                       label={contest.platform}
                       size="medium"
@@ -471,12 +471,12 @@ const Contests = () => {
                   </Box>
 
                   {/* Date Information */}
-                  <Box sx={{ mb: 3, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                  <Box sx={{ mb: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
                     {contest.startDate && (
                       <Box sx={{ 
                         display: 'flex', 
                         alignItems: 'center', 
-                        p: 2,
+                        p: 1.5,
                         background: `${cardColor.light}`,
                         borderRadius: 2.5,
                         border: `1px solid ${cardColor.light}`,
@@ -516,7 +516,7 @@ const Contests = () => {
                       <Box sx={{ 
                         display: 'flex', 
                         alignItems: 'center',
-                        p: 2,
+                        p: 1.5,
                         background: `${cardColor.light}`,
                         borderRadius: 2.5,
                         border: `1px solid ${cardColor.light}`,
