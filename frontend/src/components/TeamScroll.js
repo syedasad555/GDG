@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import "./TeamScroll.css";
 import { resolveUploadUrl } from "../utils/resolveUploadUrl";
 
 const TeamScroll = () => {
-  const trackRef = useRef(null);
   const [teamMembers, setTeamMembers] = useState([]);
+  const [duplicatedMembers, setDuplicatedMembers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [failedImages, setFailedImages] = useState({});
 
   useEffect(() => {
     const fetchTeam = async () => {
@@ -31,38 +32,37 @@ const TeamScroll = () => {
     fetchTeam();
   }, []);
 
-  const duplicatedMembers = teamMembers.length ? [...teamMembers, ...teamMembers] : [];
-
   useEffect(() => {
-    const track = trackRef.current;
-    const wrapper = track?.parentElement;
+    if (teamMembers.length === 0) return;
 
-    if (!track || !wrapper) return;
-
-    const pause = () => {
-      if (track) {
-        track.style.animationPlayState = "paused";
+    const calculateDuplicates = () => {
+      // Card width (330px) + gap (24px) = 354px
+      const cardWidthWithGap = 354;
+      const screenWidth = window.innerWidth || 1920;
+      const targetWidth = screenWidth * 2;
+      const singleSetWidth = teamMembers.length * cardWidthWithGap;
+      
+      let setsNeeded = Math.ceil(targetWidth / singleSetWidth);
+      if (setsNeeded % 2 !== 0) {
+        setsNeeded += 1;
       }
-    };
+      setsNeeded = Math.max(2, setsNeeded);
 
-    const resume = () => {
-      if (track) {
-        track.style.animationPlayState = "running";
+      let list = [];
+      for (let i = 0; i < setsNeeded; i++) {
+        list = [...list, ...teamMembers];
       }
+      setDuplicatedMembers(list);
     };
 
-    wrapper.addEventListener("mouseenter", pause);
-    wrapper.addEventListener("mouseleave", resume);
-    wrapper.addEventListener("touchstart", pause);
-    wrapper.addEventListener("touchend", resume);
+    calculateDuplicates();
+    window.addEventListener("resize", calculateDuplicates);
+    return () => window.removeEventListener("resize", calculateDuplicates);
+  }, [teamMembers]);
 
-    return () => {
-      wrapper.removeEventListener("mouseenter", pause);
-      wrapper.removeEventListener("mouseleave", resume);
-      wrapper.removeEventListener("touchstart", pause);
-      wrapper.removeEventListener("touchend", resume);
-    };
-  }, [teamMembers.length]);
+  const handleImageError = (key) => {
+    setFailedImages((prev) => ({ ...prev, [key]: true }));
+  };
 
   return (
     <div className="team-section">
@@ -81,37 +81,57 @@ const TeamScroll = () => {
       ) : (
         <>
           <div className="scroll-wrapper">
-            <div ref={trackRef} className="scroll-track">
-              {duplicatedMembers.map((member, index) => (
-                <div key={`scroll-${member._id}-${index}`} className="card scroll-card">
-                  <div className="card-image-container">
-                    {member.photo ? (
-                      <img
-                        src={resolveUploadUrl(member.photo)}
-                        alt={member.name}
-                        className="card-image"
-                      />
-                    ) : (
-                      <div className="card-image card-image-placeholder">{member.name?.charAt(0) || "?"}</div>
-                    )}
-                  </div>
+            <div className="scroll-track">
+              {duplicatedMembers.map((member, index) => {
+                const uniqueKey = `${member._id}-${index}`;
+                const hasFailed = failedImages[uniqueKey];
+                return (
+                  <div key={`scroll-${uniqueKey}`} className="card scroll-card">
+                    <div className="card-image-container">
+                      {member.photo && !hasFailed ? (
+                        <img
+                          src={resolveUploadUrl(member.photo)}
+                          alt={member.name}
+                          className="card-image"
+                          onError={() => handleImageError(uniqueKey)}
+                        />
+                      ) : (
+                        <div className="card-image card-image-placeholder">
+                          <svg
+                            width="64"
+                            height="64"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            style={{ opacity: 0.6 }}
+                          >
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
 
-                  <div className="card-content">
-                    <h3 className="card-name">{member.name}</h3>
-                    <p className="card-title">{member.role}</p>
-                    {member.linkedInUrl ? (
-                      <a
-                        className="card-linkedin"
-                        href={member.linkedInUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        LinkedIn
-                      </a>
-                    ) : null}
+                    <div className="card-content">
+                      <h3 className="card-name">{member.name}</h3>
+                      <p className="card-title">{member.role}</p>
+                      {member.linkedInUrl ? (
+                        <a
+                          className="card-linkedin"
+                          href={member.linkedInUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          LinkedIn
+                        </a>
+                      ) : null}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </>

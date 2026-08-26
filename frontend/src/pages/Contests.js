@@ -88,7 +88,7 @@ const Contests = () => {
     const fetchLeaderboardData = async () => {
       try {
         const allTimeRes = await axios.get('/api/leaderboard/all-time');
-        setLeaderboardData(allTimeRes.data.leaderboard || []);
+        setLeaderboardData((allTimeRes.data.leaderboard || []).slice(0, 10));
       } catch (err) {
         console.error('Error fetching leaderboard data:', err);
       } finally {

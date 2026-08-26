@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
+import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 import {
@@ -21,6 +22,7 @@ import {
   Divider,
   useMediaQuery,
   useTheme,
+  Badge,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -43,6 +45,59 @@ const Navbar = () => {
   
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [newEventCount, setNewEventCount] = useState(0);
+  const [newContestCount, setNewContestCount] = useState(0);
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const eventsRes = await axios.get('/api/events');
+        const contestsRes = await axios.get('/api/contests');
+        
+        const events = eventsRes.data.events || eventsRes.data || [];
+        const contests = contestsRes.data.contests || contestsRes.data || [];
+
+        const lastViewedEvents = localStorage.getItem('lastViewedEventsTime');
+        const lastViewedContests = localStorage.getItem('lastViewedContestsTime');
+
+        if (lastViewedEvents) {
+          const count = events.filter(e => new Date(e.createdAt) > new Date(lastViewedEvents)).length;
+          setNewEventCount(count);
+        } else {
+          // If first time visiting the site, initialize the timestamp to now so that future creations trigger it.
+          localStorage.setItem('lastViewedEventsTime', new Date().toISOString());
+          setNewEventCount(0);
+        }
+
+        if (lastViewedContests) {
+          const count = contests.filter(c => new Date(c.createdAt) > new Date(lastViewedContests)).length;
+          setNewContestCount(count);
+        } else {
+          localStorage.setItem('lastViewedContestsTime', new Date().toISOString());
+          setNewContestCount(0);
+        }
+      } catch (err) {
+        console.error('Error fetching notification counts:', err);
+      }
+    };
+
+    fetchCounts();
+    
+    // Refresh counts every 15 seconds to catch new creations dynamically
+    const interval = setInterval(fetchCounts, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (location.pathname === '/events') {
+      localStorage.setItem('lastViewedEventsTime', new Date().toISOString());
+      setNewEventCount(0);
+    }
+    if (location.pathname === '/contests') {
+      localStorage.setItem('lastViewedContestsTime', new Date().toISOString());
+      setNewContestCount(0);
+    }
+  }, [location.pathname]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -89,8 +144,36 @@ const Navbar = () => {
             to={item.path}
             onClick={handleDrawerToggle}
           >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
+            <ListItemIcon>
+              {item.text === 'Events' && newEventCount > 0 ? (
+                <Badge badgeContent={newEventCount} color="error">
+                  {item.icon}
+                </Badge>
+              ) : item.text === 'Contests' && newContestCount > 0 ? (
+                <Badge badgeContent={newContestCount} color="error">
+                  {item.icon}
+                </Badge>
+              ) : (
+                item.icon
+              )}
+            </ListItemIcon>
+            <ListItemText 
+              primary={
+                item.text === 'Events' && newEventCount > 0 ? (
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <span>{item.text}</span>
+                    <Badge badgeContent={newEventCount} color="error" sx={{ mr: 2 }} />
+                  </Box>
+                ) : item.text === 'Contests' && newContestCount > 0 ? (
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                    <span>{item.text}</span>
+                    <Badge badgeContent={newContestCount} color="error" sx={{ mr: 2 }} />
+                  </Box>
+                ) : (
+                  item.text
+                )
+              } 
+            />
           </ListItem>
         ))}
       </List>
@@ -238,8 +321,18 @@ const Navbar = () => {
                       },
                     }}
                   >
-                    <Box sx={{ position: 'relative', zIndex: 1 }}>
-                      {item.text}
+                    <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center' }}>
+                      {item.text === 'Events' && newEventCount > 0 ? (
+                        <Badge badgeContent={newEventCount} color="error" sx={{ '& .MuiBadge-badge': { right: -10, top: 2 } }}>
+                          {item.text}
+                        </Badge>
+                      ) : item.text === 'Contests' && newContestCount > 0 ? (
+                        <Badge badgeContent={newContestCount} color="error" sx={{ '& .MuiBadge-badge': { right: -10, top: 2 } }}>
+                          {item.text}
+                        </Badge>
+                      ) : (
+                        item.text
+                      )}
                     </Box>
                   </Button>
                 ))}

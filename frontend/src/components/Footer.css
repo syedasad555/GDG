@@ -71,3 +71,15 @@
         transform: translateY(-4px) scale(1.08);
     }
 }
+
+.developer-link {
+    color: #4285F4;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.developer-link:hover {
+    color: #357ae8;
+    text-decoration: underline;
+}

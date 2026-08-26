@@ -72,6 +72,7 @@
   font-size: 2.5rem;
   font-weight: 800;
   font-family: 'Poppins', sans-serif;
+  border-radius: 16px;
 }
 
 .card-linkedin {
@@ -88,10 +89,9 @@
 }
 
 .scroll-wrapper {
-  width: 100vw;
+  width: 100%;
   overflow: hidden;
   position: relative;
-  margin-left: calc(-50vw + 50%);
   margin-bottom: 24px;
 }
 
@@ -102,6 +102,11 @@
   animation: scroll-left 20s linear infinite;
   will-change: transform;
   width: fit-content;
+}
+
+.scroll-wrapper:hover .scroll-track,
+.scroll-track:hover {
+  animation-play-state: paused !important;
 }
 
 @keyframes scroll-left {

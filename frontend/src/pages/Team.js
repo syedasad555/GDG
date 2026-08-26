@@ -172,7 +172,20 @@ function TeamCard({ member, domainColor, variant }) {
           <img src={src} alt={member.name} onError={() => setImgFailed(true)} />
         ) : null}
         <div className={`team-photo-placeholder ${showPlaceholder ? "visible" : ""}`} aria-hidden>
-          {member.name?.charAt(0) || "?"}
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ opacity: 0.6 }}
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
         </div>
       </div>
       <h3>{member.name}</h3>

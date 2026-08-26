@@ -118,7 +118,24 @@ const Footer = () => {
             © {currentYear} GDG College Club. All rights reserved.
           </Typography>
           <Typography variant="body2" sx={{ color: '#9aa0a6' }}>
-            Website developed by Sahith Guttikonda and Syed Asad
+            Website developed by{' '}
+            <a
+              href="https://www.linkedin.com/in/sahith-guttikonda-3b89402a3?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="developer-link"
+            >
+              Sahith Guttikonda
+            </a>{' '}
+            and{' '}
+            <a
+              href="https://www.linkedin.com/in/syed-asadullah-4101652a4?utm_source=share_via&utm_content=profile&utm_medium=member_android"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="developer-link"
+            >
+              Syed Asad
+            </a>
           </Typography>
         </Box>
       </Container>

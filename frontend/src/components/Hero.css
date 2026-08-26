@@ -566,6 +566,10 @@
 }
 
 @media (max-width: 768px) {
+    .hero-side {
+        display: none !important;
+    }
+
     .hero-title {
         font-size: 48px;
     }
