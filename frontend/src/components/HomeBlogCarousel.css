@@ -310,6 +310,19 @@
 }
 
 @media (max-width: 767px) {
+  .home-blog-section {
+    padding: 24px 16px 36px;
+  }
+
+  .home-blog-header {
+    margin-bottom: 16px;
+  }
+
+  .blog-card {
+    padding: 16px;
+    min-height: auto;
+  }
+
   .home-blog-title {
     font-size: 36px;
     letter-spacing: -1.5px;
@@ -318,11 +331,12 @@
   .blog-main {
     flex-direction: column;
     align-items: center;
+    gap: 16px;
   }
 
   .blog-cover {
     width: 100%;
-    height: 200px;
+    height: 140px;
   }
 
   .blog-title {
@@ -366,6 +380,6 @@
   }
 
   .home-blog-section {
-    padding: 40px 12px 60px;
+    padding: 24px 12px 36px;
   }
 }
