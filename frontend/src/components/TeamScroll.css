@@ -247,32 +247,23 @@
 /* Responsive */
 @media (max-width: 768px) {
   .team-section {
-    padding: 24px 16px 36px;
-  }
-
-  .team-header {
-    margin-bottom: 16px;
+    padding: 40px 16px 60px;
   }
 
   .scroll-card {
-    width: 190px;
+    width: 220px;
   }
 
   .card-image-container {
-    height: 130px;
-    padding: 6px;
+    height: 160px;
   }
 
   .card-name {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .card-title {
-    font-size: 13px;
-  }
-
-  .card-content {
-    padding: 14px;
+    font-size: 14px;
   }
 
   .scroll-track {
@@ -284,7 +275,7 @@
   }
 
   .scroll-wrapper {
-    margin-bottom: 20px;
+    margin-bottom: 28px;
   }
 }
 
