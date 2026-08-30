@@ -41,8 +41,6 @@ const Gallery = () => {
     images: item.images || []
   }));
 
-  const [prevActiveIndex, setPrevActiveIndex] = useState(0);
-
   const itemCount = transformedItems.length;
 
   const handleModalClose = useCallback(() => {

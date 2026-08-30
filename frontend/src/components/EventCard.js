@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Clock, MapPin, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, MapPin, ArrowRight, Users } from 'lucide-react';
 import './EventCard.css';
 
 const getDefaultEventImage = (category) => {
@@ -44,6 +44,14 @@ const EventCard = ({ event, isAdmin = false, isPast = false }) => {
     return now > registrationEnd;
   };
 
+  const getRegistrationText = () => {
+    const count = event.registrations ? event.registrations.length : (event.registeredCount || 0);
+    if (event.category === 'Hackathon') {
+      return `${count} ${count === 1 ? 'Team' : 'Teams'} Reg.`;
+    }
+    return `${count} ${count === 1 ? 'Member' : 'Members'} Reg.`;
+  };
+
   return (
     <Link 
       to={`/events/${event._id}`}
@@ -56,6 +64,10 @@ const EventCard = ({ event, isAdmin = false, isPast = false }) => {
             alt={event.title}
             className="event-card-minimal-image"
           />
+          <div className="event-card-reg-badge">
+            <Users size={13} style={{ color: '#ffffff' }} />
+            <span>{getRegistrationText()}</span>
+          </div>
           {event.category && (
             <div className="event-card-category-badge">
               {event.category}

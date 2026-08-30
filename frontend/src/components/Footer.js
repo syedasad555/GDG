@@ -9,7 +9,6 @@ import {
 import './Footer.css';
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
   const location = useLocation();
   const isTeamPage = location.pathname === '/team';
   const isHomePage = location.pathname === '/';

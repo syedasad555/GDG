@@ -91,6 +91,33 @@
   transform: scale(1.08);
 }
 
+.event-card-reg-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(18, 18, 18, 0.88);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transform: translateY(0);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 2;
+}
+
+.event-card-minimal:hover .event-card-reg-badge {
+  transform: translateY(-3px) scale(1.05);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 .event-card-category-badge {
   position: absolute;
   top: 16px;

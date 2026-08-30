@@ -3,6 +3,13 @@ const User = require('../models/User');
 const path = require('path');
 const fs = require('fs');
 
+const formatEvent = (evt) => {
+  const obj = evt.toObject ? evt.toObject() : evt;
+  const regCount = evt.registrations ? evt.registrations.length : (evt.registeredCount || 0);
+  obj.registeredCount = regCount;
+  return obj;
+};
+
 exports.getAllEvents = async (req, res) => {
   try {
     const { category, search, sort } = req.query;
@@ -27,11 +34,12 @@ exports.getAllEvents = async (req, res) => {
     }
 
     const result = await events;
+    const formattedEvents = result.map(formatEvent);
 
     res.status(200).json({
       status: 'success',
-      count: result.length,
-      events: result
+      count: formattedEvents.length,
+      events: formattedEvents
     });
   } catch (err) {
     res.status(400).json({
@@ -56,7 +64,7 @@ exports.getEventById = async (req, res) => {
     event.views = (event.views || 0) + 1;
     await event.save();
 
-    const eventObj = event.toObject();
+    const eventObj = formatEvent(event);
     delete eventObj.registrations;
 
     res.status(200).json({
@@ -337,10 +345,12 @@ exports.getUpcomingEvents = async (req, res) => {
       .limit(10)
       .populate('createdBy', 'name email');
 
+    const formattedEvents = events.map(formatEvent);
+
     res.status(200).json({
       status: 'success',
-      count: events.length,
-      events
+      count: formattedEvents.length,
+      events: formattedEvents
     });
   } catch (err) {
     res.status(400).json({
@@ -359,10 +369,12 @@ exports.getPastEvents = async (req, res) => {
       .sort({ date: -1 })
       .populate('createdBy', 'name email');
 
+    const formattedEvents = events.map(formatEvent);
+
     res.status(200).json({
       status: 'success',
-      count: events.length,
-      events
+      count: formattedEvents.length,
+      events: formattedEvents
     });
   } catch (err) {
     res.status(400).json({
