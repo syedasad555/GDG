@@ -1,0 +1,129 @@
+/* Event Details Page - Clean, Professional Light Design */
+
+.event-detail-container {
+  min-height: 90vh;
+  padding-top: 32px;
+  padding-bottom: 64px;
+}
+
+/* Back Button */
+.back-events-btn {
+  border-radius: 20px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  text-transform: none !important;
+  padding: 6px 16px !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.25s ease !important;
+}
+
+.back-events-btn:hover {
+  color: #1e293b !important;
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  transform: translateX(-3px);
+}
+
+/* Event Main Card */
+.event-main-card {
+  border-radius: 20px !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+  overflow: hidden;
+  background-color: #ffffff !important;
+}
+
+/* Event Cover Media */
+.event-cover-media {
+  height: 400px;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 768px) {
+  .event-cover-media {
+    height: 250px;
+  }
+}
+
+/* Category Chip */
+.event-category-chip {
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  font-size: 0.8rem !important;
+  padding: 4px 8px !important;
+  letter-spacing: 0.5px;
+}
+
+/* Sidebar Registration Card */
+.registration-paper {
+  border-radius: 20px !important;
+  padding: 24px !important;
+  border: 1px solid #dbeafe !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%) !important;
+  box-shadow: 0 10px 25px rgba(66, 133, 244, 0.08) !important;
+}
+
+.register-btn-main {
+  border-radius: 30px !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  font-size: 1rem !important;
+  padding: 12px 24px !important;
+  box-shadow: 0 4px 14px rgba(66, 133, 244, 0.35) !important;
+  transition: all 0.3s ease !important;
+}
+
+.register-btn-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(66, 133, 244, 0.45) !important;
+}
+
+/* Sidebar Details Paper */
+.details-paper {
+  border-radius: 20px !important;
+  padding: 24px !important;
+  border: 1px solid #e2e8f0 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Detail Icon Badge */
+.detail-icon-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background-color: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 14px;
+}
+
+/* Registration Dialog */
+.event-dialog-paper {
+  border-radius: 20px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
+}
+
+.dialog-header-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialog-field .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+}
+
+.team-member-box {
+  padding: 18px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 14px !important;
+  background-color: #f8fafc !important;
+  margin-bottom: 12px !important;
+}

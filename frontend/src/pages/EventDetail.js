@@ -32,6 +32,7 @@ import {
 } from '@mui/icons-material';
 import { format, parseISO, isFuture } from 'date-fns';
 import * as eventApi from '../api/events';
+import './EventDetail.css';
 
 const getDefaultEventImage = (category) => {
   switch(category) {
@@ -185,17 +186,18 @@ const EventDetail = () => {
 
   if (error) {
     return (
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Typography color="error" align="center">
+      <Container maxWidth="lg" className="event-detail-container">
+        <Typography color="error" align="center" variant="h6">
           {error}
         </Typography>
-        <Box textAlign="center" mt={2}>
+        <Box textAlign="center" mt={3}>
           <Button
             component={Link}
             to="/events"
             variant="outlined"
             color="primary"
             startIcon={<ArrowBackIcon />}
+            className="back-events-btn"
           >
             Back to Events
           </Button>
@@ -206,8 +208,8 @@ const EventDetail = () => {
 
   if (!event) {
     return (
-      <Container maxWidth="lg" sx={{ py: 8, textAlign: 'center' }}>
-        <Typography variant="h5" gutterBottom>
+      <Container maxWidth="lg" className="event-detail-container" sx={{ textAlign: 'center' }}>
+        <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
           Event not found
         </Typography>
         <Button
@@ -215,7 +217,7 @@ const EventDetail = () => {
           to="/events"
           variant="contained"
           color="primary"
-          sx={{ mt: 2 }}
+          sx={{ mt: 2, borderRadius: '30px', px: 4 }}
         >
           Browse Events
         </Button>
@@ -231,12 +233,13 @@ const EventDetail = () => {
     : false;
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
+    <Container maxWidth="lg" className="event-detail-container">
       <Button
         component={Link}
         to="/events"
         startIcon={<ArrowBackIcon />}
-        sx={{ mb: 3, textTransform: 'none' }}
+        className="back-events-btn"
+        sx={{ mb: 3 }}
       >
         Back to Events
       </Button>
@@ -245,27 +248,20 @@ const EventDetail = () => {
         <Grid item xs={12} md={8}>
           <Card
             elevation={0}
-            sx={{
-              borderRadius: 2,
-              overflow: 'hidden',
-              mb: 4,
-              border: '1px solid',
-              borderColor: 'divider',
-            }}
+            className="event-main-card"
+            sx={{ mb: 4 }}
           >
             <CardMedia
               component="img"
-              height="400"
+              className="event-cover-media"
               image={event.coverImage || getDefaultEventImage(event.category)}
               alt={event.title}
               sx={{
-                objectFit: 'cover',
-                objectPosition: 'top center',
                 backgroundColor: event.coverImage ? 'transparent' : 'grey.200'
               }}
             />
 
-            <CardContent sx={{ p: 4 }}>
+            <CardContent sx={{ p: { xs: 3, md: 4 } }}>
               <Box
                 sx={{
                   display: 'flex',
@@ -278,9 +274,8 @@ const EventDetail = () => {
                   label={event.category || 'Event'}
                   color="primary"
                   size="small"
+                  className="event-category-chip"
                   sx={{
-                    borderRadius: '4px',
-                    fontWeight: 600,
                     backgroundColor: `${theme.palette.primary.main}15`,
                     color: theme.palette.primary.main,
                   }}
@@ -292,9 +287,11 @@ const EventDetail = () => {
                 component="h1"
                 gutterBottom
                 sx={{
-                  fontWeight: 700,
+                  fontWeight: 800,
                   mb: 3,
-                  fontSize: { xs: '2rem', md: '2.5rem' },
+                  fontSize: { xs: '1.8rem', md: '2.4rem' },
+                  color: '#0f172a',
+                  lineHeight: 1.25,
                 }}
               >
                 {event.title}
@@ -303,15 +300,18 @@ const EventDetail = () => {
               <Box
                 dangerouslySetInnerHTML={{ __html: event.description }}
                 sx={{
+                  color: '#334155',
+                  fontSize: '1rem',
+                  lineHeight: 1.8,
                   '& h2, & h3, & h4': {
                     mt: 3,
                     mb: 2,
-                    color: 'text.primary',
-                    fontWeight: 600,
+                    color: '#0f172a',
+                    fontWeight: 700,
                   },
                   '& p': {
                     mb: 2,
-                    lineHeight: 1.7,
+                    lineHeight: 1.75,
                   },
                   '& ul, & ol': {
                     pl: 3,
@@ -323,6 +323,7 @@ const EventDetail = () => {
                   '& a': {
                     color: theme.palette.primary.main,
                     textDecoration: 'none',
+                    fontWeight: 600,
                     '&:hover': {
                       textDecoration: 'underline',
                     },
@@ -343,26 +344,20 @@ const EventDetail = () => {
             {isEventUpcoming && (
               <Paper
                 elevation={0}
-                sx={{
-                  p: 3,
-                  mb: 3,
-                  borderRadius: 2,
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  backgroundColor: 'background.paper',
-                }}
+                className="registration-paper"
+                sx={{ mb: 3 }}
               >
                 <Typography
                   variant="h6"
                   component="h3"
-                  sx={{ mb: 2, fontWeight: 700 }}
+                  sx={{ mb: 1, fontWeight: 800, color: '#0f172a' }}
                 >
                   Register for this event
                 </Typography>
                 <Typography
                   variant="body2"
                   color="textSecondary"
-                  sx={{ mb: 3 }}
+                  sx={{ mb: 3, lineHeight: 1.6 }}
                 >
                   {isRegistered
                     ? 'You are registered for this event!'
@@ -378,7 +373,7 @@ const EventDetail = () => {
                     color="success"
                     size="large"
                     disabled
-                    sx={{ mb: 2 }}
+                    sx={{ mb: 1, borderRadius: '30px', py: 1.2, fontWeight: 700 }}
                   >
                     Registered
                   </Button>
@@ -389,7 +384,7 @@ const EventDetail = () => {
                     color="inherit"
                     size="large"
                     disabled
-                    sx={{ mb: 2 }}
+                    sx={{ mb: 1, borderRadius: '30px', py: 1.2, fontWeight: 700 }}
                   >
                     Registrations Closed
                   </Button>
@@ -399,8 +394,9 @@ const EventDetail = () => {
                     variant="contained"
                     color="primary"
                     size="large"
+                    className="register-btn-main"
                     onClick={handleRegistrationOpen}
-                    sx={{ mb: 2 }}
+                    sx={{ mb: 1 }}
                   >
                     Register Now
                   </Button>
@@ -410,40 +406,35 @@ const EventDetail = () => {
 
             <Paper
               elevation={0}
-              sx={{
-                p: 3,
-                borderRadius: 2,
-                border: '1px solid',
-                borderColor: 'divider',
-                backgroundColor: 'background.paper',
-              }}
+              className="details-paper"
             >
               <Typography
                 variant="h6"
                 component="h3"
-                sx={{ mb: 2, fontWeight: 700 }}
+                sx={{ mb: 2.5, fontWeight: 800, color: '#0f172a' }}
               >
                 Event Details
               </Typography>
 
-              <Box sx={{ mb: 3 }}>
+              <Box>
                 <Box
                   sx={{
                     display: 'flex',
-                    mb: 2,
+                    alignItems: 'flex-start',
+                    mb: 2.5,
                     pb: 2,
                     borderBottom: '1px solid',
-                    borderColor: 'divider',
+                    borderColor: '#f1f5f9',
                   }}
                 >
-                  <CalendarIcon
-                    sx={{ mr: 2, color: 'primary.main', mt: 0.5 }}
-                  />
+                  <div className="detail-icon-badge">
+                    <CalendarIcon fontSize="small" />
+                  </div>
                   <Box>
-                    <Typography variant="subtitle2" fontWeight={600}>
+                    <Typography variant="subtitle2" fontWeight={700} color="#0f172a">
                       Date & Time
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
                       {format(parseISO(event.date), 'EEEE, MMMM d, yyyy')}
                       {event.time && ` • ${event.time}`}
                     </Typography>
@@ -454,20 +445,21 @@ const EventDetail = () => {
                   <Box
                     sx={{
                       display: 'flex',
-                      mb: 2,
+                      alignItems: 'flex-start',
+                      mb: 2.5,
                       pb: 2,
                       borderBottom: '1px solid',
-                      borderColor: 'divider',
+                      borderColor: '#f1f5f9',
                     }}
                   >
-                    <CalendarIcon
-                      sx={{ mr: 2, color: 'primary.main', mt: 0.5 }}
-                    />
+                    <div className="detail-icon-badge" style={{ backgroundColor: '#fef2f2', color: '#ef4444' }}>
+                      <CalendarIcon fontSize="small" />
+                    </div>
                     <Box>
-                      <Typography variant="subtitle2" fontWeight={600}>
+                      <Typography variant="subtitle2" fontWeight={700} color="#0f172a">
                         Registration Ends
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
                         {format(parseISO(event.registrationEndTime), 'EEEE, MMMM d, yyyy, hh:mm a')}
                       </Typography>
                     </Box>
@@ -478,27 +470,28 @@ const EventDetail = () => {
                   <Box
                     sx={{
                       display: 'flex',
-                      mb: 2,
+                      alignItems: 'flex-start',
+                      mb: 2.5,
                       pb: 2,
                       borderBottom: '1px solid',
-                      borderColor: 'divider',
+                      borderColor: '#f1f5f9',
                     }}
                   >
-                    <LocationIcon
-                      sx={{ mr: 2, color: 'primary.main', mt: 0.5 }}
-                    />
+                    <div className="detail-icon-badge" style={{ backgroundColor: '#f0fdf4', color: '#16a34a' }}>
+                      <LocationIcon fontSize="small" />
+                    </div>
                     <Box>
-                      <Typography variant="subtitle2" fontWeight={600}>
+                      <Typography variant="subtitle2" fontWeight={700} color="#0f172a">
                         Location
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
                         {event.venue}
                       </Typography>
                       {event.address && (
                         <Typography
                           variant="body2"
                           color="text.secondary"
-                          sx={{ mt: 0.5 }}
+                          sx={{ mt: 0.3 }}
                         >
                           {event.address}
                         </Typography>
@@ -511,20 +504,20 @@ const EventDetail = () => {
                   <Box
                     sx={{
                       display: 'flex',
-                      mb: 2,
-                      pb: 2,
-                      borderBottom: '1px solid',
-                      borderColor: 'divider',
+                      alignItems: 'flex-start',
+                      mb: event.speaker ? 2.5 : 0,
+                      pb: event.speaker ? 2 : 0,
+                      borderBottom: event.speaker ? '1px solid #f1f5f9' : 'none',
                     }}
                   >
-                    <GroupsIcon
-                      sx={{ mr: 2, color: 'primary.main', mt: 0.5 }}
-                    />
+                    <div className="detail-icon-badge" style={{ backgroundColor: '#faf5ff', color: '#9333ea' }}>
+                      <GroupsIcon fontSize="small" />
+                    </div>
                     <Box>
-                      <Typography variant="subtitle2" fontWeight={600}>
+                      <Typography variant="subtitle2" fontWeight={700} color="#0f172a">
                         Team Info
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
                         Max {event.teamSize} members per team
                       </Typography>
                       {event.teamMembers && (
@@ -540,16 +533,17 @@ const EventDetail = () => {
                   <Box
                     sx={{
                       display: 'flex',
+                      alignItems: 'flex-start',
                     }}
                   >
-                    <PersonIcon
-                      sx={{ mr: 2, color: 'primary.main', mt: 0.5 }}
-                    />
+                    <div className="detail-icon-badge" style={{ backgroundColor: '#fff7ed', color: '#ea580c' }}>
+                      <PersonIcon fontSize="small" />
+                    </div>
                     <Box>
-                      <Typography variant="subtitle2" fontWeight={600}>
+                      <Typography variant="subtitle2" fontWeight={700} color="#0f172a">
                         Speaker
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
                         {event.speaker.name}
                       </Typography>
                       {event.speaker.role && (
@@ -575,16 +569,11 @@ const EventDetail = () => {
         onClose={handleRegistrationClose}
         maxWidth="sm"
         fullWidth
+        PaperProps={{ className: 'event-dialog-paper' }}
       >
-        <DialogTitle sx={{ pb: 1 }}>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+        <DialogTitle sx={{ pb: 1, pt: 3, px: 3 }}>
+          <Box className="dialog-header-box">
+            <Typography variant="h6" component="div" sx={{ fontWeight: 800, color: '#0f172a' }}>
               {isHackathon ? 'Team Registration' : 'Register'} for {event.title}
             </Typography>
             <IconButton
@@ -595,15 +584,15 @@ const EventDetail = () => {
               <CloseIcon />
             </IconButton>
           </Box>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
             {format(parseISO(event.date), 'EEEE, MMMM d, yyyy')}
             {event.time && ` • ${event.time}`}
           </Typography>
         </DialogTitle>
         <form onSubmit={handleRegistrationSubmit}>
-          <DialogContent dividers>
+          <DialogContent dividers sx={{ p: 3 }}>
             {isHackathon && (
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1, color: theme.palette.primary.main }}>
                 Team Lead Details
               </Typography>
             )}
@@ -618,6 +607,7 @@ const EventDetail = () => {
                   value={registrationData.name}
                   onChange={handleRegistrationChange}
                   margin="normal"
+                  className="dialog-field"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -631,6 +621,7 @@ const EventDetail = () => {
                   value={registrationData.email}
                   onChange={handleRegistrationChange}
                   margin="normal"
+                  className="dialog-field"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -642,6 +633,7 @@ const EventDetail = () => {
                   value={registrationData.phone}
                   onChange={handleRegistrationChange}
                   margin="normal"
+                  className="dialog-field"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -654,6 +646,7 @@ const EventDetail = () => {
                   value={registrationData.rollNumber}
                   onChange={handleRegistrationChange}
                   margin="normal"
+                  className="dialog-field"
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -666,6 +659,7 @@ const EventDetail = () => {
                   onChange={handleRegistrationChange}
                   margin="normal"
                   select
+                  className="dialog-field"
                   SelectProps={{ native: true }}
                 >
                   <option value=""></option>
@@ -687,6 +681,7 @@ const EventDetail = () => {
                   onChange={handleRegistrationChange}
                   margin="normal"
                   select
+                  className="dialog-field"
                   SelectProps={{ native: true }}
                 >
                   <option value=""></option>
@@ -702,7 +697,7 @@ const EventDetail = () => {
                 <>
                   <Grid item xs={12}>
                     <Box sx={{ mt: 2, mb: 1, borderTop: '1px solid', borderColor: 'divider', pt: 2 }}>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#0f172a' }}>
                         Team Details
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
@@ -720,13 +715,14 @@ const EventDetail = () => {
                       value={registrationData.teamName}
                       onChange={handleRegistrationChange}
                       margin="normal"
+                      className="dialog-field"
                     />
                   </Grid>
 
                   {registrationData.members.map((member, idx) => (
                     <Grid item xs={12} key={idx}>
-                      <Box sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 2, mb: 1 }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
+                      <Box className="team-member-box">
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1.5, color: '#0f172a' }}>
                           Team Member {idx + 1}
                         </Typography>
                         <Grid container spacing={2}>
@@ -737,6 +733,7 @@ const EventDetail = () => {
                               value={member.name}
                               onChange={(e) => handleMemberChange(idx, 'name', e.target.value)}
                               size="small"
+                              className="dialog-field"
                             />
                           </Grid>
                           <Grid item xs={12} sm={6}>
@@ -746,6 +743,7 @@ const EventDetail = () => {
                               value={member.rollNumber}
                               onChange={(e) => handleMemberChange(idx, 'rollNumber', e.target.value)}
                               size="small"
+                              className="dialog-field"
                             />
                           </Grid>
                           <Grid item xs={12} sm={6}>
@@ -756,6 +754,7 @@ const EventDetail = () => {
                               value={member.email}
                               onChange={(e) => handleMemberChange(idx, 'email', e.target.value)}
                               size="small"
+                              className="dialog-field"
                             />
                           </Grid>
                           <Grid item xs={12} sm={6}>
@@ -765,6 +764,7 @@ const EventDetail = () => {
                               value={member.phone}
                               onChange={(e) => handleMemberChange(idx, 'phone', e.target.value)}
                               size="small"
+                              className="dialog-field"
                             />
                           </Grid>
                         </Grid>
@@ -775,11 +775,11 @@ const EventDetail = () => {
               )}
             </Grid>
           </DialogContent>
-          <DialogActions sx={{ p: 2, borderTop: '1px solid', borderColor: 'divider' }}>
-            <Button onClick={handleRegistrationClose} color="inherit" sx={{ mr: 1 }}>
+          <DialogActions sx={{ p: 2.5, borderTop: '1px solid', borderColor: 'divider' }}>
+            <Button onClick={handleRegistrationClose} color="inherit" sx={{ mr: 1, borderRadius: '20px', px: 3, fontWeight: 600 }}>
               Cancel
             </Button>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary" sx={{ borderRadius: '20px', px: 4, py: 1, fontWeight: 700 }}>
               Register
             </Button>
           </DialogActions>
@@ -796,7 +796,7 @@ const EventDetail = () => {
           onClose={handleSnackbarClose}
           severity={snackbar.severity}
           variant="filled"
-          sx={{ width: '100%' }}
+          sx={{ width: '100%', borderRadius: '12px' }}
         >
           {snackbar.message}
         </Alert>
