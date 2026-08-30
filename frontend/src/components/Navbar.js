@@ -184,7 +184,7 @@ const Navbar = () => {
             <ListItem
               button
               component={RouterLink}
-              to="/admin"
+              to="/gdg-cms-9x4k"
               onClick={handleDrawerToggle}
             >
               <ListItemIcon><DashboardIcon /></ListItemIcon>
@@ -193,7 +193,7 @@ const Navbar = () => {
             <ListItem
               button
               component={RouterLink}
-              to="/admin/profile"
+              to="/gdg-cms-9x4k/profile"
               onClick={handleDrawerToggle}
             >
               <ListItemIcon><PersonIcon /></ListItemIcon>
@@ -400,7 +400,7 @@ const Navbar = () => {
                     >
                       <MenuItem
                         component={RouterLink}
-                        to="/admin"
+                        to="/gdg-cms-9x4k"
                         onClick={handleClose}
                         sx={{
                           py: 1.5,
@@ -422,7 +422,7 @@ const Navbar = () => {
                       </MenuItem>
                       <MenuItem
                         component={RouterLink}
-                        to="/admin/profile"
+                        to="/gdg-cms-9x4k/profile"
                         onClick={handleClose}
                         sx={{
                           py: 1.5,

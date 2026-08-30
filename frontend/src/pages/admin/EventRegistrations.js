@@ -201,7 +201,7 @@ const EventRegistrations = () => {
       {/* Back Button */}
       <Button
         startIcon={<ArrowBackIcon />}
-        onClick={() => navigate('/admin/events')}
+        onClick={() => navigate('/gdg-cms-9x4k/events')}
         sx={{ mb: 3 }}
       >
         Back to Events

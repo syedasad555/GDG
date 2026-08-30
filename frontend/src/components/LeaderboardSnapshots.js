@@ -199,11 +199,21 @@ const LeaderboardSnapshots = () => {
                         {/* Rank Medal */}
                         <Box
                           sx={{
-                            fontSize: '2rem',
-                            color: getMedalColor(performer.rank),
-                            fontWeight: 700,
-                            minWidth: 40,
-                            textAlign: 'center',
+                            width: 44,
+                            height: 44,
+                            minWidth: 44,
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: performer.rank <= 3 ? '1.6rem' : '0.9rem',
+                            fontWeight: 800,
+                            color: performer.rank <= 3 ? 'inherit' : '#fff',
+                            backgroundColor: performer.rank <= 3
+                              ? 'transparent'
+                              : getMedalColor(performer.rank),
+                            border: performer.rank <= 3 ? 'none' : `2px solid ${getMedalColor(performer.rank)}`,
+                            flexShrink: 0,
                           }}
                         >
                           {getMedalIcon(performer.rank)}

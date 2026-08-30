@@ -35,7 +35,7 @@ const LoginSignup = () => {
     try {
       const result = await login(loginData.email, loginData.password);
       if (result.success) {
-        const dest = from && String(from).startsWith('/admin') ? from : '/admin';
+        const dest = from && String(from).startsWith('/gdg-cms-9x4k') ? from : '/gdg-cms-9x4k';
         navigate(dest, { replace: true });
       } else {
         setLoginError(result.error || 'Login failed. Please try again.');

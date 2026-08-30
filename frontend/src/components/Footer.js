@@ -115,9 +115,6 @@ const Footer = () => {
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
           <Typography variant="body2" sx={{ color: '#9aa0a6' }}>
-            © {currentYear} GDG College Club. All rights reserved.
-          </Typography>
-          <Typography variant="body2" sx={{ color: '#9aa0a6' }}>
             Website developed by{' '}
             <a
               href="https://www.linkedin.com/in/sahith-guttikonda-3b89402a3?utm_source=share_via&utm_content=profile&utm_medium=member_android"

@@ -1,12 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <g fill="none" stroke-width="8.5" stroke-linecap="round">
-    <!-- Red: Top arm of '<' -->
-    <line x1="28" y1="16" x2="14" y2="28" stroke="#EA4335" />
-    <!-- Blue: Bottom arm of '<' -->
-    <line x1="14" y1="36" x2="28" y2="48" stroke="#4285F4" />
-    <!-- Green: Top arm of '>' -->
-    <line x1="36" y1="16" x2="50" y2="28" stroke="#34A853" />
-    <!-- Yellow: Bottom arm of '>' -->
-    <line x1="50" y1="36" x2="36" y2="48" stroke="#FBBC05" />
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 64" width="68" height="64">
+  <!-- Left chevron '<': apex at (6,32), tips at (22,16) and (22,48) — same height, shifted left -->
+  <path d="M 22 16 L 6 32" stroke="#EA4335" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <path d="M 6 32 L 22 48" stroke="#4285F4" stroke-width="12" stroke-linecap="round" fill="none"/>
+
+  <!-- Right chevron '>': apex at (62,32), tips at (46,16) and (46,48) — same height, shifted right -->
+  <path d="M 62 32 L 46 48" stroke="#FBBC05" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <path d="M 46 16 L 62 32" stroke="#34A853" stroke-width="12" stroke-linecap="round" fill="none"/>
 </svg>

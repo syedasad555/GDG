@@ -44,8 +44,8 @@ const onUnauthorized = (error) => {
 
     // Keep public pages usable even if a background/admin-only request 401s.
     // AdminRoute will still protect admin screens and send users to login.
-    if (window.location.pathname.startsWith('/admin')) {
-      window.location.href = '/login';
+    if (window.location.pathname.startsWith('/gdg-cms-9x4k')) {
+      window.location.href = '/gdg-auth-7m2p';
     }
   }
   return Promise.reject(error);

@@ -638,21 +638,42 @@ const Contests = () => {
           background: 'rgba(255,255,255,0.98)',
           backdropFilter: 'blur(20px)',
         }}>
-          <CardContent sx={{ p: 4 }}>
+          <CardContent sx={{ p: { xs: 1.5, sm: 3, md: 4 } }}>
             {leaderboardLoading ? (
               <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
                 <CircularProgress sx={{ color: '#5B9FED' }} />
               </Box>
             ) : (
               <>
-                <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 3, overflow: 'hidden' }}>
-                  <Table>
+                <TableContainer
+                  component={Paper}
+                  elevation={0}
+                  sx={{
+                    borderRadius: 3,
+                    overflowX: 'auto',
+                    overflowY: 'visible',
+                    WebkitOverflowScrolling: 'touch',
+                    '&::-webkit-scrollbar': {
+                      height: '6px',
+                    },
+                    '&::-webkit-scrollbar-track': {
+                      background: 'rgba(91,159,237,0.08)',
+                      borderRadius: '10px',
+                    },
+                    '&::-webkit-scrollbar-thumb': {
+                      background: 'linear-gradient(135deg, #5B9FED, #4A8FDC)',
+                      borderRadius: '10px',
+                    },
+                    '&::-webkit-scrollbar-thumb:hover': {
+                      background: '#3a7fd4',
+                    },
+                  }}
+                >
+                  <Table sx={{ minWidth: 480 }}>
                     <TableHead>
                       <TableRow sx={{ background: 'linear-gradient(135deg, #5B9FED 0%, #4A8FDC 100%)' }}>
                         <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Rank</TableCell>
-                        <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Name</TableCell>
-                        <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Email</TableCell>
-                        <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Roll Number</TableCell>
+                        <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Username</TableCell>
                         <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>HackerRank ID</TableCell>
                         <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Score</TableCell>
                         <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Actions</TableCell>
@@ -721,16 +742,6 @@ const Contests = () => {
                               </TableCell>
                               <TableCell>
                                 <Typography variant="body2" sx={{ color: 'rgba(0,0,0,0.6)' }}>
-                                  {entry.user?.email || entry.email || 'N/A'}
-                                </Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography variant="body2" sx={{ color: 'rgba(0,0,0,0.7)', fontWeight: 500 }}>
-                                  {entry.user?.rollNumber || entry.rollNumber || 'N/A'}
-                                </Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Typography variant="body2" sx={{ color: 'rgba(0,0,0,0.6)' }}>
                                   {entry.hackerRankId || entry.user?.hackerRankId || entry.user?.hackerrankHandle || 'N/A'}
                                 </Typography>
                               </TableCell>
@@ -773,7 +784,7 @@ const Contests = () => {
                         })
                       ) : (
                         <TableRow>
-                          <TableCell colSpan={7} align="center">
+                          <TableCell colSpan={5} align="center">
                             <Box sx={{ py: 6 }}>
                               <EmojiEventsIcon sx={{ fontSize: 48, color: 'rgba(0,0,0,0.2)', mb: 2 }} />
                               <Typography variant="body2" sx={{ color: 'rgba(0,0,0,0.6)' }}>

@@ -57,7 +57,7 @@ const theme = createTheme({
 
 function AppContent() {
   const location = useLocation();
-  const isAuthPage = location.pathname === '/login';
+  const isAuthPage = location.pathname === '/gdg-auth-7m2p';
   
   return (
     <div className="app">
@@ -73,20 +73,24 @@ function AppContent() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/gallery/:id" element={<GalleryDetail />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/login" element={<LoginSignup />} />
-          <Route path="/signup" element={<Navigate to="/login" replace />} />
+          <Route path="/gdg-auth-7m2p" element={<LoginSignup />} />
+          {/* Old /login and /signup paths → 404 (not redirected, to prevent discovery) */}
+          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/signup" element={<Navigate to="/" replace />} />
           
-          {/* Admin Routes */}
-          <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-          <Route path="/admin/events" element={<AdminRoute><AdminEvents /></AdminRoute>} />
-          <Route path="/admin/events/:eventId/registrations" element={<AdminRoute><EventRegistrations /></AdminRoute>} />
-          <Route path="/admin/blogs" element={<AdminRoute><AdminBlogs /></AdminRoute>} />
-          <Route path="/admin/contests" element={<AdminRoute><AdminContests /></AdminRoute>} />
-          <Route path="/admin/gallery" element={<AdminRoute><AdminGallery /></AdminRoute>} />
-          <Route path="/admin/profile" element={<AdminRoute><AdminProfile /></AdminRoute>} />
-          <Route path="/admin/members" element={<Navigate to="/admin/team" replace />} />
-          <Route path="/admin/team" element={<AdminRoute><TeamManagement /></AdminRoute>} />
-          <Route path="/admin/leaderboard" element={<AdminRoute><LeaderboardManagement /></AdminRoute>} />
+          {/* Admin Routes — obfuscated paths */}
+          <Route path="/gdg-cms-9x4k" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+          <Route path="/gdg-cms-9x4k/events" element={<AdminRoute><AdminEvents /></AdminRoute>} />
+          <Route path="/gdg-cms-9x4k/events/:eventId/registrations" element={<AdminRoute><EventRegistrations /></AdminRoute>} />
+          <Route path="/gdg-cms-9x4k/blogs" element={<AdminRoute><AdminBlogs /></AdminRoute>} />
+          <Route path="/gdg-cms-9x4k/contests" element={<AdminRoute><AdminContests /></AdminRoute>} />
+          <Route path="/gdg-cms-9x4k/gallery" element={<AdminRoute><AdminGallery /></AdminRoute>} />
+          <Route path="/gdg-cms-9x4k/profile" element={<AdminRoute><AdminProfile /></AdminRoute>} />
+          <Route path="/gdg-cms-9x4k/members" element={<Navigate to="/gdg-cms-9x4k/team" replace />} />
+          <Route path="/gdg-cms-9x4k/team" element={<AdminRoute><TeamManagement /></AdminRoute>} />
+          <Route path="/gdg-cms-9x4k/leaderboard" element={<AdminRoute><LeaderboardManagement /></AdminRoute>} />
+          {/* Old /admin paths → redirect to home to prevent discovery */}
+          <Route path="/admin/*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
       {!isAuthPage && <Footer />}

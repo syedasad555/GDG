@@ -425,7 +425,7 @@ const AdminEvents = () => {
         <MenuItem
           onClick={() => {
             if (selectedEvent) {
-              navigate(`/admin/events/${selectedEvent._id}/registrations`);
+              navigate(`/gdg-cms-9x4k/events/${selectedEvent._id}/registrations`);
             }
             handleCloseMenu();
           }}

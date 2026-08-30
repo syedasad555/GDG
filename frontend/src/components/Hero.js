@@ -162,7 +162,12 @@ const Marquee = ({ direction, performers }) => {
           <div className="review-card" key={`${performer.rank}-${i}`}>
             <div className="review-header">
               <div className="profile-icon" style={{ 
-                fontSize: performer.rank <= 3 ? '24px' : '18px',
+                width: '48px',
+                height: '48px',
+                minWidth: '48px',
+                minHeight: '48px',
+                flexShrink: 0,
+                fontSize: performer.rank <= 3 ? '24px' : '16px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -170,16 +175,12 @@ const Marquee = ({ direction, performers }) => {
               }}>
                 {performer.rank <= 3 ? getMedalIcon(performer.rank) : `#${performer.rank}`}
               </div>
-              <div style={{ flex: 1 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 <div className="review-author">{performer.name}</div>
                 <div className="review-username">Rank #{performer.rank}</div>
               </div>
             </div>
             <div className="review-body">
-              <div style={{ marginBottom: '8px', fontWeight: 600 }}>
-                <span style={{ opacity: 0.8 }}>Roll No: </span>
-                {performer.rollNumber}
-              </div>
               <div style={{ marginBottom: '8px', fontWeight: 600 }}>
                 <span style={{ opacity: 0.8 }}>HackerRank: </span>
                 {performer.hackerRankId}

@@ -130,7 +130,7 @@ export const AdminRoute = ({ children }) => {
   useEffect(() => {
     if (!loading) {
       if (!isAuthenticated) {
-        navigate('/login', { state: { from: location.pathname } });
+        navigate('/gdg-auth-7m2p', { state: { from: location.pathname } });
       } else if (!isAdmin) {
         navigate('/');
       }
