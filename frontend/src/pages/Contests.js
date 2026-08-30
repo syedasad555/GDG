@@ -671,6 +671,7 @@ const Contests = () => {
                       <TableRow sx={{ background: 'linear-gradient(135deg, #5B9FED 0%, #4A8FDC 100%)' }}>
                         <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Rank</TableCell>
                         <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Username</TableCell>
+                        <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Contest Name</TableCell>
                         <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>HackerRank ID</TableCell>
                         <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Score</TableCell>
                         <TableCell sx={{ color: '#fff', fontWeight: 700, fontSize: '0.95rem' }}>Actions</TableCell>
@@ -738,6 +739,18 @@ const Contests = () => {
                                 </Box>
                               </TableCell>
                               <TableCell>
+                                <Chip 
+                                  label={entry.contestName || 'Contest'}
+                                  size="small"
+                                  sx={{
+                                    background: 'rgba(91, 159, 237, 0.12)',
+                                    color: '#2563eb',
+                                    fontWeight: 600,
+                                    fontSize: '0.8rem',
+                                  }}
+                                />
+                              </TableCell>
+                              <TableCell>
                                 <Typography variant="body2" sx={{ color: 'rgba(0,0,0,0.6)' }}>
                                   {entry.hackerRankId || entry.user?.hackerRankId || entry.user?.hackerrankHandle || 'N/A'}
                                 </Typography>
@@ -781,7 +794,7 @@ const Contests = () => {
                         })
                       ) : (
                         <TableRow>
-                          <TableCell colSpan={5} align="center">
+                          <TableCell colSpan={6} align="center">
                             <Box sx={{ py: 6 }}>
                               <EmojiEventsIcon sx={{ fontSize: 48, color: 'rgba(0,0,0,0.2)', mb: 2 }} />
                               <Typography variant="body2" sx={{ color: 'rgba(0,0,0,0.6)' }}>

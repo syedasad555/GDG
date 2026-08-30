@@ -12,7 +12,7 @@ const leaderboardSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true
+    required: false
   },
   rollNumber: {
     type: String,

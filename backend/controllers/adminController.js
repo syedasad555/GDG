@@ -197,12 +197,24 @@ exports.uploadLeaderboard = async (req, res) => {
     const results = [];
     const filePath = req.file.path;
 
+    // Helper to get field value case-insensitively from CSV row
+    const getFieldValue = (row, keyAliases, fallback = '') => {
+      const keys = Object.keys(row);
+      for (const k of keys) {
+        const cleanK = k.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+        for (const alias of keyAliases) {
+          if (cleanK === alias.toLowerCase().replace(/[^a-z0-9]/g, '')) {
+            const val = row[k];
+            return val !== undefined && val !== null ? String(val).trim() : fallback;
+          }
+        }
+      }
+      return fallback;
+    };
+
     // Parse CSV file
     fs.createReadStream(filePath)
-      .pipe(csv({
-        headers: ['name', 'email', 'rollNumber', 'hackerRankId', 'score', 'contestName'],
-        skipLines: 0
-      }))
+      .pipe(csv())
       .on('data', (data) => {
         results.push(data);
       })
@@ -212,20 +224,20 @@ exports.uploadLeaderboard = async (req, res) => {
 
           // Process each row
           for (const row of results) {
-            // Trim whitespace from all fields
-            const name = row.name ? row.name.trim() : '';
-            const email = row.email ? row.email.trim() : '';
-            const rollNumber = (row.rollNumber ? row.rollNumber.trim() : '') || 'N/A';
-            const hackerRankId = (row.hackerRankId ? row.hackerRankId.trim() : '') || 'N/A';
-            const score = row.score ? row.score.trim() : '';
-            const contestName = (row.contestName ? row.contestName.trim() : '') || 'Contest';
+            const name = getFieldValue(row, ['name', 'username', 'studentname', 'player', 'user']);
+            const hackerRankId = getFieldValue(row, ['hackerrankid', 'hackerrank', 'handle', 'id']);
+            const scoreRaw = getFieldValue(row, ['score', 'points', 'marks']);
+            const contestName = getFieldValue(row, ['contestname', 'contest', 'eventname', 'competition'], 'Contest');
+            const email = getFieldValue(row, ['email'], `${hackerRankId ? hackerRankId.toLowerCase() : 'user'}@gdg.club`);
+            const rollNumber = getFieldValue(row, ['rollnumber', 'rollno'], 'N/A');
             
-            if (!name || !email || !score || !hackerRankId) {
-              console.log('Skipping invalid row - missing required fields:', row);
-              continue; // Skip invalid rows
+            // Validation: name, score, and hackerRankId are required
+            if (!name || !scoreRaw || !hackerRankId) {
+              console.log('Skipping invalid row - missing required fields (name, hackerRankId, or score):', row);
+              continue;
             }
 
-            const scoreValue = parseInt(score) || 0;
+            const scoreValue = parseInt(scoreRaw) || 0;
             if (scoreValue <= 0) {
               console.log('Skipping row with invalid score:', row);
               continue;
@@ -237,7 +249,7 @@ exports.uploadLeaderboard = async (req, res) => {
               continue;
             }
 
-            console.log('Processing entry:', { name, email, hackerRankId, score: scoreValue });
+            console.log('Processing entry:', { name, contestName, hackerRankId, score: scoreValue });
 
             // Update or create entries for all three periods
             const periods = ['weekly', 'monthly', 'all-time'];
@@ -261,7 +273,7 @@ exports.uploadLeaderboard = async (req, res) => {
                 existingEntry.averageScore = existingEntry.score / existingEntry.contestsParticipated;
                 
                 await existingEntry.save();
-                console.log(`Updated existing ${period} entry: ${email} - ${oldScore} + ${scoreValue} = ${existingEntry.score}`);
+                console.log(`Updated existing ${period} entry: ${hackerRankId} - ${oldScore} + ${scoreValue} = ${existingEntry.score}`);
               } else {
                 // Create new entry
                 const leaderboardData = {
@@ -279,7 +291,7 @@ exports.uploadLeaderboard = async (req, res) => {
                 };
 
                 await Leaderboard.create(leaderboardData);
-                console.log(`Created new ${period} entry: ${email} - ${scoreValue}`);
+                console.log(`Created new ${period} entry: ${hackerRankId} - ${scoreValue}`);
               }
             }
 

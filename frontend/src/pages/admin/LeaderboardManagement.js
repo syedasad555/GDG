@@ -20,7 +20,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
+  Chip,
   Pagination,
 } from '@mui/material';
 import {
@@ -28,7 +28,6 @@ import {
   Delete as DeleteIcon,
   Download as DownloadIcon,
   Info as InfoIcon,
-  Refresh as RefreshIcon,
   Warning as WarningIcon,
 } from '@mui/icons-material';
 import axios from 'axios';
@@ -42,10 +41,6 @@ const LeaderboardManagement = () => {
   const [success, setSuccess] = useState('');
   const [uploadFile, setUploadFile] = useState(null);
   const [infoOpen, setInfoOpen] = useState(false);
-  const [resetDialogOpen, setResetDialogOpen] = useState(false);
-  const [finalConfirmationOpen, setFinalConfirmationOpen] = useState(false);
-  const [resetLoading, setResetLoading] = useState(false);
-  const [confirmationText, setConfirmationText] = useState('');
   const [snapshots, setSnapshots] = useState([]);
   const [pastChampionsDialogOpen, setPastChampionsDialogOpen] = useState(false);
   const [pastChampionsResetLoading, setPastChampionsResetLoading] = useState(false);
@@ -121,7 +116,7 @@ const LeaderboardManagement = () => {
         },
       });
 
-      setSuccess(`Leaderboard updated successfully! ${response.data.count} entries added.`);
+      setSuccess(`Leaderboard updated successfully! ${response.data.count} entries processed.`);
       setUploadFile(null);
       fetchLeaderboards();
     } catch (err) {
@@ -147,10 +142,10 @@ const LeaderboardManagement = () => {
 
   const handleDownloadTemplate = () => {
     const csvContent = [
-      'name,email,rollNumber,hackerRankId,score,contestName',
-      'John Doe,john@example.com,CS001,johndoe,100,HackerRank Contest',
-      'Jane Smith,jane@example.com,IT002,janesmith,95,HackerRank Contest',
-      'Bob Johnson,bob@example.com,ECE003,bobjohnson,88,CodeChef Contest',
+      'name,hackerRankId,score,contestName',
+      'John Doe,johndoe,100,GDG CodeFest 2026',
+      'Jane Smith,janesmith,95,GDG CodeFest 2026',
+      'Bob Johnson,bobjohnson,88,Weekly HackerRank Challenge',
     ].join('\n');
 
     const element = document.createElement('a');
@@ -160,45 +155,6 @@ const LeaderboardManagement = () => {
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
-  };
-
-  const handleResetLeaderboard = async () => {
-    try {
-      setResetLoading(true);
-      setError('');
-      setSuccess('');
-      
-      const token = localStorage.getItem('token');
-      await axios.delete('/api/admin/leaderboard/reset', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setSuccess('All leaderboard data has been successfully deleted!');
-      setResetDialogOpen(false);
-      setFinalConfirmationOpen(false);
-      fetchLeaderboards();
-      fetchSnapshots();
-    } catch (err) {
-      console.error('Error resetting leaderboard:', err);
-      setError(err.response?.data?.message || 'Failed to reset leaderboard');
-    } finally {
-      setResetLoading(false);
-    }
-  };
-
-  const openResetDialog = () => {
-    setResetDialogOpen(true);
-  };
-
-  const openFinalConfirmation = () => {
-    setResetDialogOpen(false);
-    setFinalConfirmationOpen(true);
-  };
-
-  const cancelReset = () => {
-    setResetDialogOpen(false);
-    setFinalConfirmationOpen(false);
-    setConfirmationText('');
   };
 
   const handleResetPastChampions = async () => {
@@ -225,14 +181,13 @@ const LeaderboardManagement = () => {
 
   const LeaderboardTable = ({ data, startIndex: startIdx, totalPages: totalPagesProp, currentPage, onPageChange, totalEntries, entriesPerPage: entriesPerPageProp }) => (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
         <Table>
-          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+          <TableHead sx={{ backgroundColor: '#f8fafc' }}>
             <TableRow>
               <TableCell sx={{ fontWeight: 700 }}>Rank</TableCell>
-              <TableCell sx={{ fontWeight: 700 }}>Name</TableCell>
-              <TableCell sx={{ fontWeight: 700 }}>Email</TableCell>
-              <TableCell sx={{ fontWeight: 700 }}>Roll Number</TableCell>
+              <TableCell sx={{ fontWeight: 700 }}>Username</TableCell>
+              <TableCell sx={{ fontWeight: 700 }}>Contest Name</TableCell>
               <TableCell sx={{ fontWeight: 700 }}>HackerRank ID</TableCell>
               <TableCell sx={{ fontWeight: 700 }} align="right">
                 Score
@@ -251,9 +206,19 @@ const LeaderboardManagement = () => {
                     <TableCell sx={{ fontWeight: 700, color: 'primary.main' }}>
                       {actualRank}
                     </TableCell>
-                    <TableCell>{entry.name}</TableCell>
-                    <TableCell>{entry.email}</TableCell>
-                    <TableCell>{entry.rollNumber || 'N/A'}</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>{entry.name}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={entry.contestName || 'Contest'}
+                        size="small"
+                        sx={{
+                          backgroundColor: '#e0f2fe',
+                          color: '#0369a1',
+                          fontWeight: 600,
+                          fontSize: '0.8rem',
+                        }}
+                      />
+                    </TableCell>
                     <TableCell>{entry.hackerRankId || 'N/A'}</TableCell>
                     <TableCell align="right" sx={{ fontWeight: 700 }}>
                       {entry.score}
@@ -273,7 +238,7 @@ const LeaderboardManagement = () => {
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
+                <TableCell colSpan={6} align="center" sx={{ py: 4 }}>
                   <Typography color="textSecondary">No entries yet</Typography>
                 </TableCell>
               </TableRow>
@@ -334,263 +299,219 @@ const LeaderboardManagement = () => {
           </Typography>
         </Paper>
 
-      {error && (
-        <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError('')}>
-          {error}
-        </Alert>
-      )}
-      {success && (
-        <Alert severity="success" sx={{ mb: 3 }} onClose={() => setSuccess('')}>
-          {success}
-        </Alert>
-      )}
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError('')}>
+            {error}
+          </Alert>
+        )}
+        {success && (
+          <Alert severity="success" sx={{ mb: 3 }} onClose={() => setSuccess('')}>
+            {success}
+          </Alert>
+        )}
 
-      {/* Upload Section */}
-      <Card sx={{ mb: 6 }}>
-        <CardContent>
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
-              Upload Leaderboard Data
-            </Typography>
-            <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-              Upload a CSV file with contest scores to update the leaderboard.
-            </Typography>
-          </Box>
+        {/* Upload Section */}
+        <Card sx={{ mb: 6, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.06)' }}>
+          <CardContent sx={{ p: 4 }}>
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+                Upload Leaderboard Data
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Upload a CSV file with contest scores to update the leaderboard.
+              </Typography>
+            </Box>
 
-          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 3 }}>
-            <input
-              type="file"
-              accept=".csv"
-              onChange={handleFileChange}
-              style={{ flex: 1 }}
-            />
-            <Button
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center', mb: 2 }}>
+              <Button
+                variant="outlined"
+                component="label"
+                color="primary"
+                startIcon={<UploadIcon />}
+                sx={{
+                  borderRadius: '30px',
+                  px: 3,
+                  py: 1,
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  borderWidth: '2px',
+                  '&:hover': { borderWidth: '2px' },
+                }}
+              >
+                Choose CSV File
+                <input
+                  type="file"
+                  accept=".csv"
+                  hidden
+                  onChange={handleFileChange}
+                />
+              </Button>
+
+              {uploadFile ? (
+                <Chip
+                  label={`📄 ${uploadFile.name}`}
+                  onDelete={() => setUploadFile(null)}
+                  color="primary"
+                  variant="outlined"
+                  sx={{ fontWeight: 600, py: 1 }}
+                />
+              ) : (
+                <Typography variant="caption" color="textSecondary" sx={{ fontStyle: 'italic' }}>
+                  No file chosen
+                </Typography>
+              )}
+
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<UploadIcon />}
+                onClick={handleUpload}
+                disabled={!uploadFile}
+                sx={{
+                  borderRadius: '30px',
+                  px: 3,
+                  py: 1,
+                  textTransform: 'none',
+                  fontWeight: 700,
+                }}
+              >
+                Upload Data
+              </Button>
+
+              <Button
+                variant="outlined"
+                color="primary"
+                startIcon={<DownloadIcon />}
+                onClick={handleDownloadTemplate}
+                sx={{
+                  borderRadius: '30px',
+                  px: 3,
+                  py: 1,
+                  textTransform: 'none',
+                  fontWeight: 600,
+                }}
+              >
+                Download Template
+              </Button>
+
+              <IconButton
+                onClick={() => setInfoOpen(true)}
+                title="CSV Format Info"
+                color="primary"
+              >
+                <InfoIcon />
+              </IconButton>
+
+              <Button
+                variant="outlined"
+                color="secondary"
+                startIcon={<WarningIcon />}
+                onClick={() => setPastChampionsDialogOpen(true)}
+                sx={{
+                  borderRadius: '30px',
+                  px: 3,
+                  py: 1,
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  ml: 'auto',
+                }}
+              >
+                Reset Past Champions ({snapshots.length})
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
+
+        {/* Leaderboard Table */}
+        <LeaderboardTable 
+          data={paginatedData} 
+          startIndex={startIndex}
+          totalPages={totalPages}
+          currentPage={page}
+          onPageChange={handlePageChange}
+          totalEntries={allTimeLeaderboard.length}
+          entriesPerPage={entriesPerPage}
+        />
+
+        {/* CSV Format Info Dialog */}
+        <Dialog open={infoOpen} onClose={() => setInfoOpen(false)} maxWidth="sm" fullWidth>
+          <DialogTitle>CSV File Format</DialogTitle>
+          <DialogContent>
+            <Box sx={{ pt: 2 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
+                Required Columns:
+              </Typography>
+              <Typography variant="body2" component="div" sx={{ mb: 2, fontFamily: 'monospace', backgroundColor: '#f5f5f5', p: 1.5, borderRadius: 1 }}>
+                name, hackerRankId, score, contestName
+              </Typography>
+
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
+                Example CSV Content:
+              </Typography>
+              <Typography variant="body2" component="div" sx={{ fontFamily: 'monospace', backgroundColor: '#f5f5f5', p: 1.5, borderRadius: 1, whiteSpace: 'pre-wrap' }}>
+{`name,hackerRankId,score,contestName
+John Doe,johndoe,100,GDG CodeFest 2026
+Jane Smith,janesmith,95,GDG CodeFest 2026
+Bob Johnson,bobjohnson,88,Weekly HackerRank Challenge`}
+              </Typography>
+
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, mt: 2, mb: 1 }}>
+                Notes:
+              </Typography>
+              <Typography variant="body2" component="ul" sx={{ pl: 2 }}>
+                <li>Name, HackerRank ID, and Score are required</li>
+                <li>Contest Name is optional (defaults to "Contest")</li>
+                <li>Score must be a positive number</li>
+                <li>First row should contain the headers</li>
+              </Typography>
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setInfoOpen(false)}>Close</Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Past Champions Reset Dialog */}
+        <Dialog open={pastChampionsDialogOpen} onClose={() => setPastChampionsDialogOpen(false)} maxWidth="sm" fullWidth>
+          <DialogTitle sx={{ display: 'flex', alignItems: 'center', color: 'secondary.main' }}>
+            <WarningIcon sx={{ mr: 1, color: 'secondary.main' }} />
+            Reset Past Champions
+          </DialogTitle>
+          <DialogContent>
+            <Box sx={{ pt: 2 }}>
+              <Typography variant="body1" sx={{ mb: 2 }}>
+                Are you sure you want to reset all past champions data? This action will:
+              </Typography>
+              <Typography variant="body2" component="ul" sx={{ pl: 2, mb: 2 }}>
+                <li>Delete all past champion snapshots</li>
+                <li>Remove all historical winner data</li>
+                <li>This action cannot be undone</li>
+              </Typography>
+              <Box sx={{ backgroundColor: '#fff3e0', p: 2, borderRadius: 1, mb: 2 }}>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                  Total snapshots to be deleted: {snapshots.length}
+                </Typography>
+              </Box>
+              <Typography variant="body2" color="secondary.main" sx={{ fontWeight: 600 }}>
+                ⚠️ This will permanently remove all past champions data from the Hall of Fame.
+              </Typography>
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setPastChampionsDialogOpen(false)} color="primary">
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleResetPastChampions} 
+              color="secondary" 
               variant="contained"
-              color="primary"
-              startIcon={<UploadIcon />}
-              onClick={handleUpload}
-              disabled={!uploadFile}
+              disabled={pastChampionsResetLoading || snapshots.length === 0}
+              startIcon={pastChampionsResetLoading ? <CircularProgress size={16} /> : <WarningIcon />}
             >
-              Upload
+              {pastChampionsResetLoading ? 'Deleting...' : 'Reset Past Champions'}
             </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              startIcon={<DownloadIcon />}
-              onClick={handleDownloadTemplate}
-            >
-              Download Template
-            </Button>
-            <IconButton
-              onClick={() => setInfoOpen(true)}
-              title="CSV Format Info"
-            >
-              <InfoIcon />
-            </IconButton>
-            <Button
-              variant="outlined"
-              color="error"
-              startIcon={<RefreshIcon />}
-              onClick={openResetDialog}
-              sx={{ ml: 2 }}
-            >
-              Reset All Data
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              startIcon={<WarningIcon />}
-              onClick={() => setPastChampionsDialogOpen(true)}
-              sx={{ ml: 2 }}
-            >
-              Reset Past Champions ({snapshots.length})
-            </Button>
-          </Box>
-
-          {uploadFile && (
-            <Typography variant="caption" color="success.main">
-              ✓ File selected: {uploadFile.name}
-            </Typography>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Leaderboard Table */}
-      <LeaderboardTable 
-        data={paginatedData} 
-        startIndex={startIndex}
-        totalPages={totalPages}
-        currentPage={page}
-        onPageChange={handlePageChange}
-        totalEntries={allTimeLeaderboard.length}
-        entriesPerPage={entriesPerPage}
-      />
-
-      {/* CSV Format Info Dialog */}
-      <Dialog open={infoOpen} onClose={() => setInfoOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>CSV File Format</DialogTitle>
-        <DialogContent>
-          <Box sx={{ pt: 2 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-              Required Columns:
-            </Typography>
-            <Typography variant="body2" component="div" sx={{ mb: 2, fontFamily: 'monospace', backgroundColor: '#f5f5f5', p: 1 }}>
-              name, email, rollNumber, score, contestName
-            </Typography>
-
-            <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-              Example:
-            </Typography>
-            <Typography variant="body2" component="div" sx={{ fontFamily: 'monospace', backgroundColor: '#f5f5f5', p: 1, whiteSpace: 'pre-wrap' }}>
-{`name,email,rollNumber,score,contestName
-John Doe,john@example.com,CS001,100,HackerRank
-Jane Smith,jane@example.com,IT002,95,CodeChef`}
-            </Typography>
-
-            <Typography variant="subtitle2" sx={{ fontWeight: 700, mt: 2, mb: 1 }}>
-              Notes:
-            </Typography>
-            <Typography variant="body2" component="ul" sx={{ pl: 2 }}>
-              <li>All columns are required</li>
-              <li>Score should be a number</li>
-              <li>Email must be valid</li>
-              <li>First row should be headers</li>
-            </Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setInfoOpen(false)}>Close</Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* First Reset Confirmation Dialog */}
-      <Dialog open={resetDialogOpen} onClose={cancelReset} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ display: 'flex', alignItems: 'center', color: 'error.main' }}>
-          <WarningIcon sx={{ mr: 1, color: 'error.main' }} />
-          Reset Leaderboard Data
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ pt: 2 }}>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              Are you sure you want to reset all leaderboard data? This action will:
-            </Typography>
-            <Typography variant="body2" component="ul" sx={{ pl: 2, mb: 2 }}>
-              <li>Delete all leaderboard entries</li>
-              <li>This action cannot be undone</li>
-            </Typography>
-            <Typography variant="body2" color="error.main" sx={{ fontWeight: 600 }}>
-              ⚠️ This is a destructive action that will permanently remove all leaderboard data.
-            </Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={cancelReset} color="primary">
-            Cancel
-          </Button>
-          <Button 
-            onClick={openFinalConfirmation} 
-            color="error" 
-            variant="contained"
-            startIcon={<WarningIcon />}
-          >
-            I Understand, Continue
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Final Confirmation Dialog */}
-      <Dialog open={finalConfirmationOpen} onClose={cancelReset} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ display: 'flex', alignItems: 'center', color: 'error.main' }}>
-          <WarningIcon sx={{ mr: 1, color: 'error.main' }} />
-          Final Confirmation
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ pt: 2 }}>
-            <Typography variant="h6" color="error.main" sx={{ mb: 2, fontWeight: 700 }}>
-              THIS IS YOUR LAST CHANCE TO CANCEL
-            </Typography>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              You are about to permanently delete ALL leaderboard data including:
-            </Typography>
-            <Box sx={{ backgroundColor: '#ffebee', p: 2, borderRadius: 1, mb: 2 }}>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                Total entries to be deleted:
-              </Typography>
-              <Typography variant="body2">
-                • All-Time: {allTimeLeaderboard.length} entries
-              </Typography>
-            </Box>
-            <Typography variant="body2" color="error.main" sx={{ fontWeight: 600 }}>
-              Type "RESET" in the confirmation box below to proceed:
-            </Typography>
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder="Type RESET to confirm"
-              sx={{ mt: 2 }}
-              size="small"
-              value={confirmationText}
-              onChange={(e) => setConfirmationText(e.target.value)}
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={cancelReset} color="primary">
-            Cancel (Keep Data)
-          </Button>
-          <Button 
-            onClick={handleResetLeaderboard} 
-            color="error" 
-            variant="contained"
-            disabled={resetLoading || confirmationText !== 'RESET'}
-            startIcon={resetLoading ? <CircularProgress size={16} /> : <RefreshIcon />}
-          >
-            {resetLoading ? 'Deleting...' : 'DELETE ALL DATA'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Past Champions Reset Dialog */}
-      <Dialog open={pastChampionsDialogOpen} onClose={() => setPastChampionsDialogOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ display: 'flex', alignItems: 'center', color: 'secondary.main' }}>
-          <WarningIcon sx={{ mr: 1, color: 'secondary.main' }} />
-          Reset Past Champions
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ pt: 2 }}>
-            <Typography variant="body1" sx={{ mb: 2 }}>
-              Are you sure you want to reset all past champions data? This action will:
-            </Typography>
-            <Typography variant="body2" component="ul" sx={{ pl: 2, mb: 2 }}>
-              <li>Delete all past champion snapshots</li>
-              <li>Remove all historical winner data</li>
-              <li>This action cannot be undone</li>
-            </Typography>
-            <Box sx={{ backgroundColor: '#fff3e0', p: 2, borderRadius: 1, mb: 2 }}>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                Total snapshots to be deleted: {snapshots.length}
-              </Typography>
-            </Box>
-            <Typography variant="body2" color="secondary.main" sx={{ fontWeight: 600 }}>
-              ⚠️ This will permanently remove all past champions data from the Hall of Fame.
-            </Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setPastChampionsDialogOpen(false)} color="primary">
-            Cancel
-          </Button>
-          <Button 
-            onClick={handleResetPastChampions} 
-            color="secondary" 
-            variant="contained"
-            disabled={pastChampionsResetLoading || snapshots.length === 0}
-            startIcon={pastChampionsResetLoading ? <CircularProgress size={16} /> : <WarningIcon />}
-          >
-            {pastChampionsResetLoading ? 'Deleting...' : 'Reset Past Champions'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          </DialogActions>
+        </Dialog>
       </Container>
     </Box>
   );
