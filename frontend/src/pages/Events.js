@@ -134,7 +134,7 @@ const Events = () => {
       <Box
         sx={{
           minHeight: '100vh',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          backgroundColor: '#667eea',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
@@ -160,30 +160,9 @@ const Events = () => {
   return (
     <Box sx={{ 
       minHeight: '100vh', 
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      backgroundColor: '#667eea',
       py: 6,
       position: 'relative',
-      overflow: 'hidden',
-      '&::before': {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)',
-        pointerEvents: 'none',
-      },
-      '&::after': {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: 'radial-gradient(circle at 80% 80%, rgba(255,255,255,0.08) 0%, transparent 50%)',
-        pointerEvents: 'none',
-      },
     }}>
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
         {/* Header Section */}
@@ -193,10 +172,10 @@ const Events = () => {
             component="h1"
             sx={{
               fontWeight: 800,
-              color: '#2d3436',
+              color: '#ffffff',
               mb: 2,
               fontSize: { xs: '2.5rem', md: '3.5rem' },
-              textShadow: '0 2px 10px rgba(0,0,0,0.05)',
+              textShadow: '0 2px 10px rgba(0,0,0,0.3)',
               animation: 'fadeInDown 0.8s ease',
               '@keyframes fadeInDown': {
                 from: {
@@ -215,7 +194,7 @@ const Events = () => {
           <Typography
             variant="h6"
             sx={{ 
-              color: 'rgba(0,0,0,0.6)',
+              color: 'rgba(255,255,255,0.7)',
               maxWidth: '700px',
               mx: 'auto',
               lineHeight: 1.6,

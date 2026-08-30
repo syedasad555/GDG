@@ -53,21 +53,18 @@ const Gallery = () => {
   const handlePrev = useCallback(() => {
     if (isAnimating || itemCount === 0) return;
     setIsAnimating(true);
-    setPrevActiveIndex(activeIndex);
     setActiveIndex((prev) => (prev - 1 + itemCount) % itemCount);
-    setTimeout(() => setIsAnimating(false), 600);
-  }, [isAnimating, itemCount, activeIndex]);
+    setTimeout(() => setIsAnimating(false), 300);
+  }, [isAnimating, itemCount]);
 
   const handleNext = useCallback(() => {
     if (isAnimating || itemCount === 0) return;
     setIsAnimating(true);
-    setPrevActiveIndex(activeIndex);
     setActiveIndex((prev) => (prev + 1) % itemCount);
-    setTimeout(() => setIsAnimating(false), 600);
-  }, [isAnimating, itemCount, activeIndex]);
+    setTimeout(() => setIsAnimating(false), 300);
+  }, [isAnimating, itemCount]);
 
   const handleCardClick = (item) => {
-    if (isAnimating) return;
     setSelectedItem(item);
     setModalOpen(true);
   };
@@ -132,7 +129,6 @@ const Gallery = () => {
                     index={index}
                     stackPosition={stackPosition}
                     isActive={index === activeIndex}
-                    wasActive={index === prevActiveIndex && index !== activeIndex}
                     totalCards={transformedItems.length}
                     onClick={() => handleCardClick(item)}
                   />

@@ -128,22 +128,19 @@ const Contests = () => {
 
   if (loading) {
     return (
-      <Box
-        sx={{
-          minHeight: '100vh',
-          background: 'linear-gradient(135deg, #5B9FED 0%, #4A8FDC 100%)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <Box sx={{ 
+        minHeight: '100vh', 
+        background: 'linear-gradient(135deg, #5B9FED 0%, #4A8FDC 100%)',
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center' 
+      }}>
         <Box sx={{ textAlign: 'center' }}>
           <CircularProgress 
             size={60} 
-            thickness={4}
             sx={{ 
-              color: '#fff',
-              mb: 2,
+              color: '#ffffff',
+              mb: 3,
             }} 
           />
           <Typography variant="h6" sx={{ color: '#fff', fontWeight: 600 }}>
@@ -207,10 +204,10 @@ const Contests = () => {
             component="h1"
             sx={{
               fontWeight: 800,
-              color: '#2d3436',
+              color: '#ffffff',
               mb: 2,
               fontSize: { xs: '2.5rem', md: '3.5rem' },
-              textShadow: '0 2px 10px rgba(0,0,0,0.05)',
+              textShadow: '0 2px 10px rgba(0,0,0,0.3)',
               animation: 'fadeInDown 0.8s ease',
               '@keyframes fadeInDown': {
                 from: {
@@ -229,7 +226,7 @@ const Contests = () => {
           <Typography
             variant="h6"
             sx={{ 
-              color: 'rgba(0,0,0,0.6)',
+              color: 'rgba(255,255,255,0.7)',
               maxWidth: '700px',
               mx: 'auto',
               mb: 4,
@@ -617,13 +614,13 @@ const Contests = () => {
           <Typography variant="h3" component="h2" sx={{ 
             fontWeight: 800, 
             mb: 2,
-            color: '#2d3436',
+            color: '#ffffff',
             fontSize: { xs: '2rem', md: '2.5rem' },
           }}>
             🏆 Contest Leaderboard
           </Typography>
           <Typography variant="h6" sx={{ 
-            color: 'rgba(0,0,0,0.6)',
+            color: 'rgba(255,255,255,0.7)',
             fontWeight: 500,
           }}>
             Top performers in our coding contests

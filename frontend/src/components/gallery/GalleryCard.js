@@ -56,7 +56,7 @@ const GalleryCard = ({ item, index, stackPosition, isActive, wasActive, totalCar
 
   return (
     <div 
-      className={`gallery-card ${isActive ? 'active' : ''} ${wasActive ? 'prev-active' : ''}`}
+      className={`gallery-card ${isActive ? 'active' : ''}`}
       style={cardStyle}
       onClick={onClick}
     >
