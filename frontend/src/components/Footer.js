@@ -48,7 +48,7 @@ const Footer = () => {
             </Typography>
             <Box className="footer-social-icons" sx={{ display: 'flex', gap: 2, ml: -1 }}>
               <Link
-                href="https://www.linkedin.com"
+                href="https://www.linkedin.com/company/google-developer-student-clubs-velagapudi-ramakrishna-siddhartha-engineering/posts/?feedView=all"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-icon footer-linkedin"
@@ -66,7 +66,7 @@ const Footer = () => {
                 <EmailIcon sx={{ fontSize: 24 }} />
               </Link>
               <Link
-                href="https://www.instagram.com"
+                href="https://www.instagram.com/gdg_vrsec/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-social-icon footer-instagram"
