@@ -65,7 +65,7 @@ const Hero = () => {
 
           <div className="social-icons">
             <a
-              href="https://www.linkedin.com"
+              href="https://www.linkedin.com/company/google-developer-student-clubs-velagapudi-ramakrishna-siddhartha-engineering/posts/?feedView=all"
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon"
@@ -81,7 +81,7 @@ const Hero = () => {
               <EmailIcon sx={{ fontSize: 30, zIndex: 1 }} />
             </a>
             <a
-              href="https://www.instagram.com"
+              href="https://www.instagram.com/gdg_vrsec/"
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon"
