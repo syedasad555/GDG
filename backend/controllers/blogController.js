@@ -1,11 +1,21 @@
 const Blog = require('../models/Blog');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const path = require('path');
+const fs = require('fs');
 
 // Helper function to generate excerpt
 const generateExcerpt = (content, length = 150) => {
   if (!content) return '';
   return content.substring(0, length).replace(/\s+\S*$/, '') + '...';
+};
+
+const deleteUploadFile = (imagePath) => {
+  if (!imagePath) return;
+  const filePath = path.join(__dirname, '../uploads', path.basename(imagePath));
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
 };
 
 // Get all blogs (public)
@@ -100,6 +110,7 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
   
   // Handle cover image update
   if (req.file) {
+    deleteUploadFile(blog.coverImage);
     updateData.coverImage = `/uploads/${req.file.filename}`;
   }
   
@@ -126,13 +137,13 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
 
 // Delete blog (admin only)
 exports.deleteBlog = catchAsync(async (req, res, next) => {
-  const blog = await Blog.findById(req.params.id);
+  const blog = await Blog.findByIdAndDelete(req.params.id);
   
   if (!blog) {
     return next(new AppError('Blog not found', 404));
   }
-  
-  await Blog.findByIdAndDelete(req.params.id);
+
+  deleteUploadFile(blog.coverImage);
   
   res.status(204).json({
     status: 'success',
