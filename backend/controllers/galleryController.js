@@ -1,5 +1,15 @@
 const Gallery = require('../models/Gallery');
 const catchAsync = require('../utils/catchAsync');
+const path = require('path');
+const fs = require('fs');
+
+const deleteUploadFile = (imagePath) => {
+  if (!imagePath) return;
+  const filePath = path.join(__dirname, '../uploads', path.basename(imagePath));
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
+};
 
 // Get all gallery items (admin)
 exports.getAllGalleries = catchAsync(async (req, res, next) => {
@@ -121,6 +131,7 @@ exports.updateGallery = catchAsync(async (req, res, next) => {
 
   // Handle title image update (first file if provided)
   if (req.files && req.files.length > 0) {
+    deleteUploadFile(gallery.titleImage);
     updateData.titleImage = `/uploads/${req.files[0].filename}`;
   }
 
@@ -150,7 +161,7 @@ exports.updateGallery = catchAsync(async (req, res, next) => {
 
 // Delete gallery item
 exports.deleteGallery = catchAsync(async (req, res, next) => {
-  const gallery = await Gallery.findById(req.params.id);
+  const gallery = await Gallery.findByIdAndDelete(req.params.id);
 
   if (!gallery) {
     return res.status(404).json({
@@ -159,7 +170,10 @@ exports.deleteGallery = catchAsync(async (req, res, next) => {
     });
   }
 
-  await Gallery.findByIdAndDelete(req.params.id);
+  deleteUploadFile(gallery.titleImage);
+  if (gallery.images && gallery.images.length > 0) {
+    gallery.images.forEach((image) => deleteUploadFile(image.url));
+  }
 
   res.status(200).json({
     status: 'success',
